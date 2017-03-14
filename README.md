@@ -1044,3 +1044,35 @@ for i = 1:m,
 *NOTE:* Ideally, we want hΘ(x(i)) ≈ y(i). This will minimize our cost function. 
 However, keep in mind that J(Θ) is not convex and thus we can end up in a local minimum instead.
 
+# Evaluating a learning algorithm
+## Evaluating a Hypothesis
+We perform some troubleshooting by:
+
+- Getting more training examples
+- Trying smaller sets of features
+- Trying additional features
+- Trying polynomial features
+- Increasing or decreasing λ
+
+A hypothesis may have a low error for the training examples but still be inaccurate (because of overfitting). 
+Thus, to evaluate a hypothesis, given a dataset of training examples, we can split up the data into two sets: a `training` set and a `test` set. 
+Typically, the training set consists of 70 % of your data and the test set is the remaining 30 %.
+
+The new procedure using these two sets is then:
+1. Learn Θ and minimize Jtrain(Θ) using the training set
+2. Compute the test set error Jtest(Θ)
+
+## The test set error
+1. for Linear regression, `Jtest(Θ)=1/2mtest ∑i=1 to mtest(hΘtest(x(i))−ytest(i))^2`
+2. For classification ~ Misclassification error (aka 0/1 misclassification error):
+```
+    err(hΘ(x),y)=1 if hΘ(x)≥0.5 and y=0 or hΘ(x)<0.5 and y=1
+                =0 otherwise
+ ```
+
+This gives us a binary 0 or 1 error result based on a misclassification. The average test error for the test set is:
+`Test Error=1/mtest ∑i=1 to mtest err(hΘtest(x(i)),ytest(i))`
+
+This gives us the proportion of the test data that was misclassified.
+
+
