@@ -10,9 +10,9 @@ These are the notes I have prepared while doing the online course for Machine Le
 * [Linear Regression](#linear_regression_with_one_variable)
 
 <a name="introduction"></a>
-#Introduction
+# Introduction
 <a name ="define_machine_learning"></a>
-##What is Machine Learning
+## What is Machine Learning
 
 Two definitions of Machine Learning are offered. 
 **Arthur Samuel** described it as: "the field of study that gives computers the ability to learn without being explicitly programmed." This is an older, informal definition.
@@ -32,7 +32,7 @@ In general, any machine learning problem can be assigned to one of two broad cla
 Supervised learning and Unsupervised learning.
 
 <a name ="define_supervised_learning"></a>
-##Supervised Learning
+## Supervised Learning
 
 - Give algorithm data sets where "right answers" are given
 - *Regression problem* - goal is to produce continuous output
@@ -62,7 +62,7 @@ Example 2:
  * Classification - Given a patient with a tumor, we have to predict whether the tumor is malignant or benign.
  
 <a name ="define_unsupervised_learning"></a>
-##Unsupervised learning
+## Unsupervised learning
 
 Unsupervised learning allows us to approach problems with little or no idea what our results should look like. 
 We can derive structure from data where we don't necessarily know the effect of the variables.
@@ -77,7 +77,7 @@ Example:
 
 **Non-clustering**: The "Cocktail Party Algorithm", allows you to find structure in a chaotic environment. (i.e. identifying individual voices and music from a mesh of sounds at a cocktail party).
 
-##Model Representation
+## Model Representation
 <a name ="linear_regression_with_one_variable"></a>
 ### Linear regression with 1 variable
 In supervised learning we have a data set called as training set, and our job from this data is to learn
@@ -93,12 +93,12 @@ so what we get is training set -> learning algo -> h(hypothesis)
 the use of the `hypothesis` is to take for example size of house(x) -> h -> estimated price(estimated value of y)
 so h is a function that maps from x’s to y’s
 
-###How do we represent h?
+### How do we represent h?
 `hθ(x) = θ0 + θ1(x)` shorthand: h(x)
 θ0 and θ1 : parameters of the model, this example can be called as linear regression with 1 variable another name for this model is 
 Univariate linear regression
 
-#Cost function
+# Cost Function
 *How to chose values for theta's?*
 Choose `θ0`, and `θ1` so that `hθ(x)` is close to `y` for training examples `(x, y)`
 
@@ -107,7 +107,7 @@ Choose `θ0`, and `θ1` so that `hθ(x)` is close to `y` for training examples `
 more formally we write it as:
 `J(θ0, θ1) = 1/2 * m * [ sum from i = 1 to m (h(x(i) ) - y(i))^2]` i.e. minimize J(θ0,θ1) over θ0, θ1
 
-###Cost function intuition
+### Cost function intuition
 simplified version of the previous cost function:
 `hθ(x) = θ1(x)`
 `J(θ1) = 1/2 * m * [sum from i = 1 through m (θ(x(i)) - y(i))^2]`
@@ -121,7 +121,7 @@ Difference between hypothesis function and cost function:
 - J(θ1) : is a function of the param θ1 which controls the slope of the line
 Each value of θ1 corresponds to a different hypothesis or to a different straight line and we could derive a different value of J(θ1)
 
-#Gradient Descent algorithm
+# Gradient Descent algorithm
 Given: some function `J(θ0, θ1)`
 want: minimize `J(θ0, θ1)` over `(θ0, θ1)`
 outline:
@@ -154,7 +154,7 @@ temp1 := 2 + root(2)
 θ0 := 1 + root(2)
 ```
 
-###Derivative:
+### Derivative:
 Let us say we have minimize J(θ1) over θ1 and θ1 belongsTo R
 `θ1 = θ1 - alpha * d/dθ1 J(θ1)`
 
@@ -165,13 +165,13 @@ so `θ1 = θ1 - alpha  * num` if derivative is >= 0
 else if derivative is <= 0
 `θ1 = θ1 - alpha  * (- num)`
 
-###Learning rate value:
+### Learning rate value:
 If alpha is too small, gradient descent can be slow. If alpha is too large, gradient descent can overshoot the minimum. It may fail to converge, or even diverge.
 Gradient descent can converge  a local minimum, even with the learning rate fixed
 As we approach local minimum, gradient descent will automatically take smaller steps. 
 So, no need to decrease alpha over time the derivative will get smaller and smaller and eventually will be 0
 
-##Apply gradient descent to minimize squared error cost function
+## Apply gradient descent to minimize squared error cost function
 `∂/∂θj J(θ0, θ1) = ∂/∂θj * 1/2*m Sum i =1 through m [(hθ(x(i)) - y(i))^2]`
 i.e.,
 
@@ -189,13 +189,10 @@ repeat until convergence {
 update θ0, θ1 simultaneously.
 ```
 
-#“Batch”  Gradient descent
+# “Batch”  Gradient descent
 “Batch”: each step of gradient descent uses all the training examples.
 
-#Linear Algebra basics:
-Matrix with 1 column is called a vector.
-
-#Multivariate Linear Regression:
+# Multivariate Linear Regression:
 size | # of beds     |# of floors     |age of home        |price
 2104 |4              |5               |23                 |120
 1416 |3              |2               |12                 |100
@@ -226,8 +223,8 @@ where.
 `θ = [θ0 θ1 θ2 .. θn]` 
 `X =[x0 x1 x2 ... xn]`
 
-#Linear Regression with Multiple variables
-##Gradient descent for multiple variables
+# Linear Regression with Multiple variables
+## Gradient descent for multiple variables
 
 A quick summary
 
@@ -238,7 +235,7 @@ A quick summary
 *cost function:*
 `J(θ0, θ1, θ2, . . ., θn) = 1/2 * m sumFrom i = 1 through m[ hθ(x(i)) - y(i)^2 ]`
 
-###Gradient descent
+### Gradient descent
 **Previously (n = 1)**
 
 Repeat {
@@ -252,11 +249,11 @@ Repeat {
 θj := θj - alpha * 1 / m sumFrom i = 1 through m [hθ(x(i)) - y(i)] * xj^(i) (simultaneous updates for j = 0, . . . , n)
 }
 
-##Gradient descent in practice 1: Feature Scaling
+## Gradient descent in practice 1: Feature Scaling
 - make sure features are on a similar scale, then gradient descent can converge more quickly 
 get every feature into approximately a -1 <= x(i) <= 1 range
 
-###Mean normalization
+### Mean normalization
 Replace xi with xi - ui to make features have approximately zero mean (do not apply to x0 = 1)
 x1 = 72 - 70/22
 x2 = 5184 - 6500 / 4000
@@ -265,8 +262,8 @@ x2 = #bedrooms - 2 /5
 x1 <- x1- u1/s1 u1: avg value of x1 in training set
 s1 is the range i.e. max value - min value or a standard deviation
 
-##Gradient descent in practice 2: Learning Rate
-###making sure gradient descent is working correctly
+## Gradient descent in practice 2: Learning Rate
+### making sure gradient descent is working correctly
 
 - after each iteration your J(θ) value should be decreasing
 for example we can make use of automatic convergence test:
@@ -274,12 +271,12 @@ declare convergence if J(θ) decreases by less than 10^-3 in 1 iteration
 - for sufficiently small value of alpha, J(θ) should decrease on every iteration
 - but if alpha is too small, gradient descent can be slow to converge
 
-###Summary:
+### Summary:
 - if the learning rate is too small: slow convergence
 - if learning rate is too large: J(θ) may not decrease on every iteration; may not converge
 - to choose learning rate , try: 0.0001, 0.01, 0.1, 1
 
-##Features and polynomial regression
+## Features and polynomial regression
 
 **Features and polynomial regression:**
 to fit complicated and non-linear functions
@@ -287,8 +284,8 @@ defining new features we may get a new model
 we may want to fit in a quadratic model like
 θ0 + θ1 * x + θ2 * x ^2 
 
-##Computing parameters Analytically
-###Normal Equation
+## Computing parameters Analytically
+### Normal Equation
 method to solve for θ analytically
 θ = (X^T * X)^-1 * X^T * Y
 Octave: pinv(X' * X) * X' * Y
@@ -302,12 +299,12 @@ Let us say you have m training examples and n features
 | works well when n is large | Need to compute (X^T*X)^-1 and slow when n is large   |
 
 
-#Classification and Representation
-##Classification: 
+# Classification and Representation
+## Classification: 
 divides the problem in two values i.e. 0(no), 1(yes)
 linear regression cannot be applied for classification problems, since we may end up getting values < 1 and < 0, hence we make use of Logistic regression
  
-##Logistic Regression Hypothesis Representation
+## Logistic Regression Hypothesis Representation
 the function to represent the hypothesis when we have a classification problem, it has the property that the output or predictions are always between 0 and 1.
 
 **Logistic Regression Model**
@@ -347,7 +344,7 @@ since this is a classification problem y can take values either 0 or 1
 i.e.
 `p(y = 0 | x; θ) = 1 - p(y = 1 | x; θ)` 
 
-##Decision Boundary
+## Decision Boundary
 
 we know that,
 `hθ(x) = g(θ^T*x)` - (1)
@@ -366,7 +363,7 @@ whenever θ^T*x < 0.5
 The decision boundary is the line that separates the area where y = 0 and where y = 1. It is created by our hypothesis function.
 Decision boundary is a property of the hypothesis.
 
-##Non-Linear decision boundaries
+## Non-Linear decision boundaries
 let us suppose hθ(x) = g(θ0 + θ1x1 + θ2x2 + θ3x1^2 + θ4x2^2), and the θ vector is
 θ = [ -1
       0
@@ -378,7 +375,7 @@ This means our hypothesis will predict y=1 if -1 + x1^2 + x2^2 >=0
 i.e. x1^2 + x2^2 >=1, if we observe the term x1^2 + x2^2 represents a circle, so outside the circle y=1, and inside we have y=0
 Once again the training set does not define the decision boundary but the hypothesis does.
      
-##Summary:
+## Summary:
 1. To attempt classification, one method is to use linear regression and map all predictions greater than 0.5 as a 1 and all less than 0.5 as a 0. However, this method doesn't work well because classification is not actually a linear function.
 
 2. The classification problem is just like the regression problem, except that the values y we now want to predict take on only a small number of discrete values. 
@@ -400,8 +397,8 @@ hence, we can say
 
 4. Again, the input to the sigmoid function g(z) (e.g. θTX) doesn't need to be linear, and could be a function that describes a circle (e.g. z=θ0+θ1x21+θ2x22) or any shape to fit our data.
  
-#Logistic Regression
-##Cost Function
+# Logistic Regression
+## Cost Function
 Given:
 Training set: {(x(1), y(1)), (x(2), y(2)),..., (x(m), y(m))}
 m examples `x` ∈ [x0
@@ -437,7 +434,7 @@ P(y = 1 | x;θ) = 0, but if y = 1; then we will penalize learning algorithm by a
 
 similarly in the case where y = 0, as hθ(x) approaches 1, the cost function blows up and goes to infinity
 
-###Summary of cost function
+### Summary of cost function
 We cannot use the same cost function that we use for linear regression because the Logistic Function will cause the output to be wavy, causing many local optima. 
 In other words, it will not be a convex function.
 
@@ -463,7 +460,7 @@ If our hypothesis approaches 0, then the cost function will approach infinity.
  
 Note that writing the cost function in this way guarantees that J(θ) is convex for logistic regression 
 
-##Simplified cost function and gradient descent
+## Simplified cost function and gradient descent
 We know that our logistic regression cost function looks like:
 
 J(θ)=1/m ∑i=1m Cost(hθ(x(i)),y(i))
@@ -482,7 +479,7 @@ we try to find parameters θ inorder to minimize J(θ)
  if we are given a new value `x`  we output of the hypothesis will be
  h(θ)(x) = 1/1+e^-θTx i.e. estimating that probability that y = 1
  
-###Gradient Descent
+### Gradient Descent
 We know that, 
 `J(θ)= - 1/m [∑i=1m y(i)log(hθ(x(i)))+(1-y(i))log(1−hθ(x(i)))]`
 
@@ -514,7 +511,7 @@ A vectorized implementation of the form `θ:=θ − α∂` for some vector `∂ 
 `θ:=θ − α ∑i=1m [(hθ(x(i)) - y(i)) x(i)]`
 
 `θ:=θ − α/m X^T(g(Xθ)−y⃗ )`
-###Summary
+### Summary
 We can compress our cost function's two conditional cases into one case:
 
 Cost(hθ(x),y)=−ylog(hθ(x))−(1−y)log(1−hθ(x))
@@ -534,7 +531,7 @@ Repeat {
     θj:= θj − α∂/∂θj J(θ)
 }
 
-##Advanced Optimization
+## Advanced Optimization
 
 Optimization algorithm:
 Cost function J(θ), want Want minθ J(θ):
@@ -597,7 +594,7 @@ initialTheta = zeros(2,1);
 ```   
 We give to the function "fminunc()" our cost function, our initial vector of theta values, and the "options" object that we created beforehand.
 
-##Multi-class classification: one-vs-all
+## Multi-class classification: one-vs-all
 Now we will approach the classification of data when we have more than two categories. Instead of y = {0, 1} we will expand our definition so that y = {0, 1...n}.
 
 Since y = {0, 1...n}, we divide our problem into n+1 (+1 because the index starts at 0) binary classification problems; in each one, we predict the probability that 'y' is a member of one of our classes.
@@ -617,8 +614,8 @@ We do this repeatedly, applying binary logistic regression to each case, and the
 Train a logistic regression classifier hθ(x) for each class￼to predict the probability that `y = i`.
 To make a prediction on a new `x`, pick the class that **maximizes** `hθ(x)`
 
-#Regularization
-##Problem of overfitting
+# Regularization
+## Problem of overfitting
 If we have too many features, the learned hypothesis may fit the training set very well (J(theta) = 1/2m ∑i=1m (hθ(x(i)) - y(i))^2 ~ 0), but fail to
 generalize to new examples
 Underfitting, or high bias, is when the form of our hypothesis function h maps poorly to the trend of the data. 
@@ -626,7 +623,7 @@ It is usually caused by a function that is too simple or uses too few features.
 At the other extreme, overfitting, or high variance, is caused by a hypothesis function that fits the available data but does not generalize well to predict new data. 
 It is usually caused by a complicated function that creates a lot of unnecessary curves and angles unrelated to the data.
 
-###Addressing overfitting:
+### Addressing overfitting:
 1. reduce number of features
     - manually select features to keep
     - model selection algorithm
@@ -634,7 +631,7 @@ It is usually caused by a complicated function that creates a lot of unnecessary
     - keep all the features, but reduce magnitude/values of θj
     - works well when we have a lot of features, each of which contributes a bit to predicting y
 
-##Cost Function
+## Cost Function
 Small values for parameters θ0, θ1, ..., θn
 - simpler hypothesis
 - less prone to overfitting
@@ -657,7 +654,7 @@ The `λ`, or lambda, is the regularization parameter. It determines how much the
 Using the above cost function with the extra summation, we can smooth the output of our hypothesis function to reduce overfitting. 
 If lambda is chosen to be too large, it may smooth out the function too much and cause underfitting. Hence, what would happen if λ=0 or is too small ?
 
-##Regularized Linear Regression
+## Regularized Linear Regression
 We can apply regularization to both linear regression and logistic regression. We will approach linear regression first.
 
 Gradient Descent
@@ -676,7 +673,7 @@ The first term in the above equation, `1 − αλ/m` will always be less than 1.
 Intuitively you can see it as reducing the value of θj by some amount on every update. 
 Notice that the second term is now exactly the same as it was before.
 
-##Normal Equation
+## Normal Equation
 
 Now let's approach regularization using the alternate method of the non-iterative normal equation.
 
@@ -694,14 +691,14 @@ It should have dimension `(n+1)×(n+1)`.
 Intuitively, this is the identity matrix (though we are not including x0), multiplied with a single real number `λ`.
 Recall that if `m ≤ n`, then `XTX` is non-invertible. However, when we add the term `λ⋅L`, then `XTX + λ⋅L` becomes invertible.
 
-##Regularized Logistic Regression 
+## Regularized Logistic Regression 
 When using regularized logistic regression the best way to monitor whether gradient descent is working correctly is to 
 Plot `- [ 1/m  ∑i=1 to m y(i) log hθ(x(i)) + (1 - y(i)) log(1 - hθ(x(i)))] + λ/2m  ∑j=1 to n θj^2` as a function of number of iterations and make sure it's decreasing
 
 We can regularize logistic regression in a similar way that we regularize linear regression. 
 As a result, we can avoid overfitting.
 
-##Cost Function
+## Cost Function
 Recall that our cost function for logistic regression was:
 
 `J(θ) = − 1/m ∑i=1 to m [y(i) log(hθ(x(i)))+(1−y(i)) log(1−hθ(x(i)))]`
@@ -722,8 +719,8 @@ hθ(x) = 1 / 1 + e^-θTx
 }
 ```
 
-#Neural Networks: Representation
-###Model Representation
+# Neural Networks: Representation
+### Model Representation
 Let's examine how we will represent a hypothesis function using neural networks. 
 At a very simple level, neurons are basically computational units that take inputs (dendrites) as electrical inputs (called "spikes") that are channeled to outputs (axons). 
 In our model, our dendrites are like the input features x1⋯xn, and the output is the result of our hypothesis function. 
@@ -867,7 +864,7 @@ x1 x2 a1(2) a2(2) hΘ(x)
 1  0   0     0     0
 1  1   1     0     1
 ```
-#Multiclass Classification
+# Multiclass Classification
 To classify data into multiple classes, we let our hypothesis function return a vector of values. 
 Say we wanted to classify our data into one of four categories(pedestrian, car, truck, and motorcycle). 
 We will use the following example to see how this classification is done. 
@@ -886,7 +883,7 @@ The inner layers, each provide us with some new information which leads to our f
  ...      ...]        ...]             hΘ(x)4]
  xn]
           
-#Cost Function
+# Cost Function
 Let's first define a few variables that we will need to use:
 
  - L = total number of layers in the network
@@ -916,7 +913,7 @@ the double sum simply adds up the logistic regression costs calculated for each 
 the triple sum simply adds up the squares of all the individual Θs in the entire network.
 the i in the triple sum does not refer to training example i
 
-##Backpropagation Algorithm
+## Backpropagation Algorithm
 "Backpropagation" is neural-network terminology for minimizing our cost function, just like what we were doing with gradient descent in logistic and linear regression. Our goal is to compute:
 
 `minΘJ(Θ)`
@@ -952,7 +949,7 @@ Hence we update our new Δ matrix.
 The capital-delta matrix D is used as an "accumulator" to add up our values as we go along and eventually compute our partial derivative. 
 Thus we get ∂∂Θ(l)ijJ(Θ)= D(l)ij
 
-##Intuition:
+## Intuition:
 
 `J(Θ)=−1/m ∑t=1 to m ∑k=1 to K [y(t)k log(hΘ(x(t)))k+(1−y(t)k) log(1−hΘ(x(t))k)]+λ/2m ∑l=1 to L−1 ∑i=1 to sl ∑j=1 to sl+1(Θ(l)j,i)2`
 If we consider simple non-multiclass classification (k = 1) and disregard regularization, the cost is computed with:
@@ -962,7 +959,7 @@ Intuitively, δ(l)j is the "error" for a(l)j (unit j in layer l). More formally,
 
 Recall that our derivative is the slope of a line tangent to the cost function, so the steeper the slope the more incorrect we are.
 
-##Implementation Note: Unrolling parameters
+## Implementation Note: Unrolling parameters
 With neural networks, we are working with sets of matrices:
 
 Θ(1),Θ(2),Θ(3),…
@@ -986,7 +983,7 @@ To summarize:
     Use forward prop/back prop to compute D(1),D(2),D(3) and J(Θ)
     Unroll D(1),D(2),D(3) to get gradientVec
     
-##Gradient checking
+## Gradient checking
 Gradient checking will assure that our backpropagation works as intended. We can approximate the derivative of our cost function with:
 
 ∂/∂ΘJ(Θ)≈J(Θ+ϵ)−J(Θ−ϵ)/2ϵ //2ϵ = (J + Θ) - (J - Θ)
@@ -1013,7 +1010,7 @@ We previously saw how to calculate the deltaVector. So once we compute our gradA
 Once you have verified that your backpropagation algorithm is correct, you don't need to compute gradApprox again. 
 The code to compute gradApprox can be very slow.
 
-##Random Initialization
+## Random Initialization
 Initializing all theta weights to zero does not work with neural networks. 
 When we backpropagate, all nodes will update to the same value repeatedly. Instead we can randomly initialize our weights for our Θ matrices using the following method:
 
@@ -1033,7 +1030,7 @@ Theta3 = rand(1,11) * (2 * INIT_EPSILON) - INIT_EPSILON;
 ```
 `rand(x,y)` is just a function in octave that will initialize a matrix of random real numbers between 0 and 1.
 
-###Summary of Neural Networks
+### Summary of Neural Networks
 We start by picking a network architecture; choose the layout of your neural network, including how many hidden units in each layer and how many layers in total you want to have.
 
 Number of input units = dimension of features x(i)
@@ -1041,7 +1038,7 @@ Number of output units = number of classes
 Number of hidden units per layer = usually more the better (must balance with cost of computation as it increases with more hidden units)
 Defaults: 1 hidden layer. If you have more than 1 hidden layer, then it is recommended that you have the same number of units in every hidden layer.
 
-###How to train a Neural Network?
+### How to train a Neural Network?
 1. Randomly initialize the weights
 2. Implement forward propagation to get hΘ(x(i)) for any x(i)
 3. Implement the cost function
@@ -1059,8 +1056,8 @@ for i = 1:m,
 *NOTE:* Ideally, we want hΘ(x(i)) ≈ y(i). This will minimize our cost function. 
 However, keep in mind that J(Θ) is not convex and thus we can end up in a local minimum instead.
 
-#Evaluating a learning algorithm
-###Evaluating a Hypothesis
+# Evaluating a learning algorithm
+### Evaluating a Hypothesis
 We perform some troubleshooting by:
 
 - Getting more training examples
@@ -1077,7 +1074,7 @@ The new procedure using these two sets is then:
 1. Learn Θ and minimize Jtrain(Θ) using the training set
 2. Compute the test set error Jtest(Θ)
 
-###The test set error
+### The test set error
 1. for Linear regression, `Jtest(Θ)=1/2mtest ∑i=1 to mtest(hΘtest(x(i)) − ytest(i))^2`
 2. For classification ~ Misclassification error (aka 0/1 misclassification error):
 ```
@@ -1090,7 +1087,7 @@ This gives us a binary 0 or 1 error result based on a misclassification. The ave
 
 This gives us the proportion of the test data that was misclassified.
 
-###Model Selection and Train/Validation/Test sets
+### Model Selection and Train/Validation/Test sets
 Just because a learning algorithm fits a training set well, that does not mean it is a good hypothesis. 
 It could over fit and as a result your predictions on the test set would be poor. 
 The error of your hypothesis as measured on the data set with which you trained the parameters will be lower than the error on any other data set.
@@ -1110,7 +1107,7 @@ We can now calculate three separate error values for the three different sets us
 - Estimate the generalization error using the test set with Jtest(Θ(d)), (d = theta from polynomial with lower error);
 This way, the degree of the polynomial d has not been trained using the test set.
 
-###Diagnosing Bias vs Variance
+### Diagnosing Bias vs Variance
 The degree of the polynomial d might be contributing to underfitting or overfitting the learning algorithm
 
 - High bias is underfitting and high variance is overfitting. Ideally, we need to find a mean between these two.
@@ -1122,7 +1119,7 @@ The cross validation error will tend to **decrease** as we increase d up to a po
 
 - **High variance (overfitting)**: `Jtrain(Θ)` will be low and `JCV(Θ)` will be much greater than `Jtrain(Θ)`.
 
-###Regularization and Bias/Variance
+### Regularization and Bias/Variance
 As λ increases, our fit becomes more rigid. 
 On the other hand, as `λ` approaches 0, we tend to over overfit the data. 
 So how do we choose our parameter `λ` to get it 'just right' ? In order to choose the model and the regularization term `λ`, we need to:
@@ -1133,7 +1130,7 @@ So how do we choose our parameter `λ` to get it 'just right' ? In order to choo
  - Compute the cross validation error using the learned `Θ` (computed with `λ`) on the `JCV(Θ)` **without** regularization or `λ = 0`.
  - Select the best combo that produces the lowest error on the cross validation set.
  - Using the best combo `Θ` and `λ`, apply it on `Jtest(Θ)` to see if it has a good generalization of the problem.
-###Learning Curves
+### Learning Curves
 Let us say we have Jtrain, and JCV
 `Jtrain(Θ) = 1/2m ∑i=1 to m (hΘ(x(i) - y(i))^2`
 `JCV(Θ) = 1/2mcv ∑i=1 to mcv (hΘ(x(i) - y(i))^2`
@@ -1159,7 +1156,7 @@ Also, `Jtrain(Θ) < JCV(Θ)` but the difference between them remains significant
 
 If a learning algorithm is suffering from **high variance**, getting more training data is likely to help.
 
-###Revisit
+### Revisit
 - Getting more training examples -> fixes high variance
 - Trying smaller sets of features -> fixes high variance
 - Trying additional features -> fixes high bias
@@ -1182,7 +1179,7 @@ If a learning algorithm is suffering from **high variance**, getting more traini
 These have low bias on the training data, but very high variance.
 - In reality, we would want to choose a model somewhere in between, that can generalize well but also fits the data reasonably well.
 
-##Building a spam classifier
+## Building a spam classifier
 - For some learning applications, it is possible to imagine coming up with many different features. But it can be hard to guess in advance which features will be useful
 - There are often many possible ideas for how to develop a high accuracy learning system; "gut feeling" is not a recommended one
 - Collect lots of data (for example "honeypot" project but doesn't always work)
@@ -1190,7 +1187,7 @@ These have low bias on the training data, but very high variance.
 - Develop algorithms to process your input in different ways (recognizing misspellings in spam).
 It is difficult to tell which of the options will be most helpful.
 
-###Error Analysis
+### Error Analysis
 - A recommended approach to perform error analysis using cross validation data rather than test data is to develop new features by examining test set, we end up 
 choosing features that will work well specifically for the test set, so `Jtest(Θ)` is no longer a good estimate of how well we generalize example
 - Start with a simple algorithm, implement it quickly, and test it early on your cross validation data.
