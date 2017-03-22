@@ -2,7 +2,7 @@
 
 These are the notes I have prepared while doing the online course for Machine Learning from Coursera taught by Dr. Andrew Ng from Stanford University.
 
-###Table of Contents
+### Table of Contents
 * [Introduction](#introduction)
     * [What is Machine Learning](#define_machine_learning)
     * [Supervised Learning](#define_supervised_learning)
