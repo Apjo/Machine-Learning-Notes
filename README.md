@@ -943,8 +943,8 @@ The g-prime derivative terms can also be written out as:
 5. `Δ(l)i,j := Δ(l)i,j + a(l)jδ(l+1)i` or with vectorization, `Δ(l):=Δ(l) + δ(l+1)(a(l))T`
 Hence we update our new Δ matrix.
 
-    - D(l)i,j:=1/m (Δ(l)i,j+λΘ(l)i,j), if j≠0.
-    - D(l)i,j:=1mΔ(l)i,j If j=0
+    - `D(l)i,j:=1/m (Δ(l)i,j+λΘ(l)i,j)`, if `j≠0`.
+    - `D(l)i,j:=1mΔ(l)i,j` If `j=0`
 
 The capital-delta matrix D is used as an "accumulator" to add up our values as we go along and eventually compute our partial derivative. 
 Thus we get ∂∂Θ(l)ijJ(Θ)= D(l)ij
@@ -1198,5 +1198,93 @@ For example if we use `stemming`, which is the process of treating the same word
 and get a 3% error rate instead of 5%, then we should definitely add it to our model. 
 However, if we try to distinguish between upper case and lower case letters and end up getting a 3.2% error rate instead of 3%, then we should avoid using this new feature. 
 Hence, we should try new things, get a numerical value for our error rate, and based on our result decide whether we want to keep the new feature or not.
+
+## Handling skewed Data
+
+|Precision/Recall  | Actual Class 1 | Actual class 0 |
+|------------------|----------------|----------------|
+|Predicted Class 1 | True positive  | False positive |
+|Predicted Class 0 | False negative | True negative  |
+
+**Precision**: of all patients where we predicted y=1, what fraction actually has cancer?
+`True positives / #Predicted positives` = `True positives / True positive + False positive`
+
+**Recall**: of all patients that actually have cancer, hat fraction did we correctly detect as having cancer?
+`True positives / #Actual positives` = `True positives / True positive + False negative`
+
+### Trading off precision and recall:
+we know that, 
+precision = true positives/predicted positives
+recall = true positives/no.of actual positives
+
+Logistic regression `0 <= hΘ(x) <= 1`
+Predict 1 if hΘ(x) >= (say) 0.5
+Predict 0 if hΘ(x) < (say) 0.5
+
+suppose we want to predict y=1, only if very confident, then
+*high precision, low recall*
+suppose we want to avoid missing too many cases of false negatives, then
+*high recall, low precision*
+
+more generally, predict 1 if `hΘ(x) >= threshold`
+
+so, if we increase the threshold from 0.5 to 0.7, then
+more y=0 predictions, this will increase the decrease of true positives and increase the number of false negatives, so recall will decrease
+
+### F1 score
+how to compare precision/recall numbers?
+F score = 2 * (precision * recall / precision + recall)
+
+### Large data rationale
+Assume feature x belongs to Rn+1 has sufficient information to predict y accurately
+
+ * Use a learning algorithm with many parameters 
+    eg: linear regression with many features; neural network with many features
+    we have a low bias algorithm, and Jtrain(Θ) will be small
+ * Use a very large training set(unlikely to overfit)
+   we have a low variance -> Jtrain(Θ) ~~ Jtest(Θ) -> Jtest will be small
+
+## Large Margin Classification
+### Support Vector Machines: Optimization Objective
+Alternative view of Logistic Regression
+
+Support Vector Machines (SVM) provides a cleaner way to learn non-linear functions
+We know that, Hypothesis for Logistic regression is given by `hΘ(x) = 1/1 + e^-ΘTx`
+Let z = ΘTx. Now, consider y=1 (either in training set, cross validation set or test set), we want hΘ(x) ~ 1, ΘTx >> 0
+conversely, y=0 (either in training set, cross validation set or test set), we want hΘ(x) ~ 0, ΘTx << 0
+
+Cost function for a single training example = `-(yloghΘ(x) + (1-y)log(1 - hΘ(x)))`
+after substituting the value for the hypothesis function
+= `-ylog 1/1+e^-ΘTx - (1-y)log(1-1/1+e^-ΘTx)`
+
+when y=1, we only have the first term
+`cost1(ΘTx(i))= -log1/1+e^-ΘTx` -- (1)
+
+the case when y=0, we have
+`cost0(ΘTx(i)) = -log(1-1/1+e^-ΘTx)` -- (2)
+
+Cost function J(Θ), for logistic regression with regularization is given as
+`J(Θ) = minΘ 1/m [ ∑i=1 to m y(i)(-loghΘ(x(i))) + (1-y(i))(-log(1-hΘx(i))) ] + λ/2m ∑j=1 to m Θj^2`
+
+replacing the costs from above equations 1 and 2, we get equation for SVM:
+`minΘ 1/m [ ∑i=1 to m y(i)cost1(ΘTx(i)) + (1-y(i))cost0(ΘTx(i)) ] + λ/2m ∑j=1 to m Θj^2`
+for SVM we write the above equation slightly differently, 
+starting with, getting rid of the term `1/m`
+
+## Kernels
+Given x, compute new features depending on proximity landmarks l(1), l(2), l(3)
+Given an example x, we define the first feature as f1 = similarity(x, l(1)) //some measure of similarity, which is given as
+f1 = similarity(x, l(1)) = exp (- ||x-l(1)||^2 / 2 σ^2)
+f2 = similarity(x, l(2)) = exp (- ||x-l(2)||^2 / 2 σ^2)
+f3 = similarity(x, l(3)) = exp (- ||x-l(3)||^2 / 2 σ^2)
+the similarity function here is nothing but the `kernel` function, the one we are using is Gaussian Kernel
+
+we can write the numerator as follows, for example for f1: 
+`exp (- ∑j=1 to n (xj - lj(1))^2 / 2 σ^2)`
+if x ~~ l(1) ie. x is closer to l(1), then
+f1 ~~ exp(- 0^2 / 2 σ^2) ~~ 1
+
+else if x is far from l(1), then
+f1 ~~ exp(- large_number^2 / 2 σ^2) ~~ 0
 
 
