@@ -8,7 +8,11 @@ These are the notes I have prepared while doing the online course for Machine Le
     * [Supervised Learning](#define_supervised_learning)
     * [Unsupervised Learning](#define_unsupervised_learning)
 * [Linear Regression](#linear_regression_with_one_variable)
-
+    * [Cost Function](#cost_function)
+    * [Cost Function Intuition](#cost_function_intuition)
+* [Multivariate Linear Regression](#multivariate_linear_regression)
+* [Gradient Descent](#gradient_descent_algorithm)
+    
 <a name="introduction"></a>
 # Introduction
 <a name ="define_machine_learning"></a>
@@ -77,6 +81,7 @@ Example:
 
 **Non-clustering**: The "Cocktail Party Algorithm", allows you to find structure in a chaotic environment. (i.e. identifying individual voices and music from a mesh of sounds at a cocktail party).
 
+<a name ="model_representation"></a>
 ## Model Representation
 <a name ="linear_regression_with_one_variable"></a>
 ### Linear regression with 1 variable
@@ -97,7 +102,7 @@ so h is a function that maps from x’s to y’s
 `hθ(x) = θ0 + θ1(x)` shorthand: h(x)
 θ0 and θ1 : parameters of the model, this example can be called as linear regression with 1 variable another name for this model is 
 Univariate linear regression
-
+<a name ="cost_function"></a>
 # Cost Function
 *How to chose values for theta's?*
 Choose `θ0`, and `θ1` so that `hθ(x)` is close to `y` for training examples `(x, y)`
@@ -107,6 +112,7 @@ Choose `θ0`, and `θ1` so that `hθ(x)` is close to `y` for training examples `
 more formally we write it as:
 `J(θ0, θ1) = 1/2 * m * [ sum from i = 1 to m (h(x(i) ) - y(i))^2]` i.e. minimize J(θ0,θ1) over θ0, θ1
 
+<a name ="cost_function_intuition"></a>
 ### Cost function intuition
 simplified version of the previous cost function:
 `hθ(x) = θ1(x)`
@@ -115,12 +121,13 @@ simplified version of the previous cost function:
 minimize J(θ1)
 θ0 = 0 means choosing only hypothesis function that passes through origin
 
-Difference between hypothesis function and cost function:
+Difference between *hypothesis function* and *cost function*:
 
-- hypothesis: for a fixed θ1, is a function of x 
-- J(θ1) : is a function of the param θ1 which controls the slope of the line
-Each value of θ1 corresponds to a different hypothesis or to a different straight line and we could derive a different value of J(θ1)
+- **hypothesis**: for a fixed `θ1`, is a function of x 
+- `J(θ1)` : is a function of the param `θ1` which controls the slope of the line
+Each value of `θ1` corresponds to a different hypothesis or to a different straight line and we could derive a different value of `J(θ1)`
 
+<a name ="gradient_descent_algorithm"></a>
 # Gradient Descent algorithm
 Given: some function `J(θ0, θ1)`
 want: minimize `J(θ0, θ1)` over `(θ0, θ1)`
@@ -131,7 +138,7 @@ outline:
 Gradient descent is used for solving a more general problem like minimize `J(θ0,..., θn)` over `(θ0,..., θn)`
 ``` 
 repeat until convergence {
-θj := θj - alpha * ∂/∂θj  J(θ0, θ1)  (for j = 0 and j = 1, represent the feature index number)
+θj := θj - α * ∂/∂θj  J(θ0, θ1)  (for j = 0 and j = 1, represent the feature index number)
 }
 where 
 := used for assignment
@@ -141,8 +148,8 @@ alpha: learning rate
 we should be updating θ0 and θ1 simultaneously as follows:
 
 ```
-temp0 := θ0 - alpha * ∂/∂θ0  J(θ0, θ1)
-temp1 := θ1 - alpha * ∂/∂θ1  J(θ0, θ1)
+temp0 := θ0 - α * ∂/∂θ0  J(θ0, θ1)
+temp1 := θ1 - α * ∂/∂θ1  J(θ0, θ1)
 θ0 := temp0
 θ1 := temp1
 ```
@@ -154,36 +161,38 @@ temp1 := 2 + root(2)
 θ0 := 1 + root(2)
 ```
 
+<a name ="gradient_descent_intuition"></a>
+## Gradient Descent Intuition
 ### Derivative:
 Let us say we have minimize J(θ1) over θ1 and θ1 belongsTo R
-`θ1 = θ1 - alpha * d/dθ1 J(θ1)`
+`θ1 = θ1 - α * d/dθ1 J(θ1)`
 
 **Computing the derivative:**
 The derivative will be a number which determines the slope of the tangent at a given point.
-so `θ1 = θ1 - alpha  * num` if derivative is >= 0
+so `θ1 = θ1 - α  * num` if derivative is >= 0
 
 else if derivative is <= 0
-`θ1 = θ1 - alpha  * (- num)`
+`θ1 = θ1 - α  * (- num)`
 
 ### Learning rate value:
-If alpha is too small, gradient descent can be slow. If alpha is too large, gradient descent can overshoot the minimum. It may fail to converge, or even diverge.
+If alpha(α) is too small, gradient descent can be slow. If alpha is too large, gradient descent can overshoot the minimum. It may fail to converge, or even diverge.
 Gradient descent can converge  a local minimum, even with the learning rate fixed
 As we approach local minimum, gradient descent will automatically take smaller steps. 
 So, no need to decrease alpha over time the derivative will get smaller and smaller and eventually will be 0
 
 ## Apply gradient descent to minimize squared error cost function
-`∂/∂θj J(θ0, θ1) = ∂/∂θj * 1/2*m Sum i =1 through m [(hθ(x(i)) - y(i))^2]`
+`∂/∂θj J(θ0, θ1) = ∂/∂θj * 1/2*m ∑i =1 to m [(hθ(x(i)) - y(i))^2]`
 i.e.,
 
-`∂/∂θj J(θ0, θ1) = ∂/∂θj * 1/2*m Sum i =1 through m[(θ0 + θ1*x(i) - y(i)) ^2]`
-`for j = 0, the expression would be: 1/m * Sum i = 1 through m[ hθ(x(i)) - y(i) ]`
-`for j = 1, the expression would be: 1/m * Sum i = 1 through m[ hθ(x(i)) - y(i) * x(i) ]`
+`∂/∂θj J(θ0, θ1) = ∂/∂θj * 1/2*m ∑i =1 to m[(θ0 + θ1*x(i) - y(i)) ^2]`
+`for j = 0, the expression would be: 1/m * ∑ i = 1 to m[ hθ(x(i)) - y(i) ]`
+`for j = 1, the expression would be: 1/m * ∑ i = 1 to m[ hθ(x(i)) - y(i) * x(i) ]`
 
 so, the gradient descent algorithm will be:
 ```
 repeat until convergence {
-θ0 := θ0 - alpha * 1/m  Sum i =1 through m[ hθ(x(i)) - y(i) ]
-θ1 := θ1 - alpha * 1/m  Sum i =1 through m[ hθ(x(i)) - y(i) * x(i) ]
+θ0 := θ0 - α * 1/m  ∑ i =1 to m[ hθ(x(i)) - y(i) ]
+θ1 := θ1 - α * 1/m  ∑ i =1 t0 m[ hθ(x(i)) - y(i) * x(i) ]
 }
 
 update θ0, θ1 simultaneously.
@@ -192,6 +201,7 @@ update θ0, θ1 simultaneously.
 # “Batch”  Gradient descent
 “Batch”: each step of gradient descent uses all the training examples.
 
+<a name="multivariate_linear_regression"></a>
 # Multivariate Linear Regression:
 size | # of beds     |# of floors     |age of home        |price
 2104 |4              |5               |23                 |120
@@ -233,20 +243,20 @@ A quick summary
 *parameters:* `θ0, θ1, ..., θn`
 
 *cost function:*
-`J(θ0, θ1, θ2, . . ., θn) = 1/2 * m sumFrom i = 1 through m[ hθ(x(i)) - y(i)^2 ]`
+`J(θ0, θ1, θ2, . . ., θn) = 1/2 * m ∑i = 1 to m[ hθ(x(i)) - y(i)^2 ]`
 
 ### Gradient descent
 **Previously (n = 1)**
 
 Repeat {
-θ0 := θ0 - alpha * 1 / m sumFrom i = 1 through m [hθ(x(i)) - y(i)]
+θ0 := θ0 - alpha * 1 / m ∑i = 1 to m [hθ(x(i)) - y(i)]
 
-θ1 := θ1 - alpha * 1 / m sumFrom i = 1 through m [hθ(x(i)) - y(i)] * x(i)
+θ1 := θ1 - alpha * 1 / m ∑i = 1 to m [hθ(x(i)) - y(i)] * x(i)
 }
 
 **New algorithm (n >= 1)**
 Repeat {
-θj := θj - alpha * 1 / m sumFrom i = 1 through m [hθ(x(i)) - y(i)] * xj^(i) (simultaneous updates for j = 0, . . . , n)
+θj := θj - α * 1 / m ∑i = 1 to m [hθ(x(i)) - y(i)] * xj^(i) (simultaneous updates for j = 0, . . . , n)
 }
 
 ## Gradient descent in practice 1: Feature Scaling
@@ -410,9 +420,9 @@ hθ(x) = 1 / 1 + e^-θT x
 
 **How to choose parameters θ ?**
 We know for Liner regression, the cost function looks like:
-`J(θ) = 1/m ∑ i = 1 through m[ 1/2 (hθ(x(i)) - y(i))^2]`
+`J(θ) = 1/m ∑ i = 1 to m[ 1/2 (hθ(x(i)) - y(i))^2]`
 alternatively, we can say
-`J(θ) = 1/m ∑ i = 1 through m[ cost(hθ(x(i) - y(i))]` 
+`J(θ) = 1/m ∑ i = 1 to m[ cost(hθ(x(i) - y(i))]` 
 
 where cost(hθ(x(i) - y(i)) = 1/2 (hθ(x(i)) - y(i))^2
 to simplify more, 
@@ -463,21 +473,23 @@ Note that writing the cost function in this way guarantees that J(θ) is convex 
 ## Simplified cost function and gradient descent
 We know that our logistic regression cost function looks like:
 
-J(θ)=1/m ∑i=1m Cost(hθ(x(i)),y(i))
+`J(θ)=1/m ∑i=1m Cost(hθ(x(i)),y(i))`
 
-Cost(hθ(x),y)=−log(hθ(x)) if y = 1
-Cost(hθ(x),y)=−log(1−hθ(x)) if y = 0
+`Cost(hθ(x),y)=−log(hθ(x)) if y = 1`
+`Cost(hθ(x),y)=−log(1−hθ(x)) if y = 0`
 Note: y = 0 or 1 always
 
-cost(hθ(x),y) = -ylog(hθ(x))-(1-y)log(1−hθ(x))
+`cost(hθ(x),y) = -ylog(hθ(x))-(1-y)log(1−hθ(x))`
 therefore our cost function now becomes,
-
+```
 J(θ)= 1/m ∑i=1m Cost(hθ(x(i)),y(i))
     = - 1/m [∑i=1m y(i)log(hθ(x(i)))+(1-y(i))log(1−hθ(x(i)))]
-given this cost function, inorder to fit the parameters,
+```
+    
+Given this cost function, inorder to fit the parameters,
 we try to find parameters θ inorder to minimize J(θ)
  if we are given a new value `x`  we output of the hypothesis will be
- h(θ)(x) = 1/1+e^-θTx i.e. estimating that probability that y = 1
+ `h(θ)(x) = 1/1+e^-θTx` i.e. estimating that probability that y = 1
  
 ### Gradient Descent
 We know that, 
@@ -504,27 +516,27 @@ but in case of Logistic regression
 `h(θ)(x) = 1/1+e^-θTx`
 
 so, if we were running gradient descent to fit a logistic regression model with parameter θ ∈ Rn+1 , a reasonable way to make sure the learning rate `alpha denoted as α`  is set properly and that gradient descent is running correctly,
-plot `J(θ)= - 1/m [∑i=1m y(i)log(hθ(x(i)))+(1-y(i))log(1−hθ(x(i)))]` as a function of the number of iterations and make sure J(θ) is decreasing every iteration
+plot `J(θ)= - 1/m [ ∑i = 1 to m y(i)log(hθ(x(i))) + (1 - y(i))log(1 − hθ(x(i)))]` as a function of the number of iterations and make sure J(θ) is decreasing every iteration
 
 A vectorized implementation of the form `θ:=θ − α∂` for some vector `∂ ∈ Rn+1` it would be
   
-`θ:=θ − α ∑i=1m [(hθ(x(i)) - y(i)) x(i)]`
+`θ:=θ − α ∑i = 1 to m [(hθ(x(i)) - y(i)) x(i)]`
 
 `θ:=θ − α/m X^T(g(Xθ)−y⃗ )`
 ### Summary
 We can compress our cost function's two conditional cases into one case:
 
-Cost(hθ(x),y)=−ylog(hθ(x))−(1−y)log(1−hθ(x))
-Notice that when y is equal to 1, then the second term (1−y)log(1−hθ(x)) will be zero and will not affect the result. 
-If y is equal to 0, then the first term −ylog(hθ(x)) will be zero and will not affect the result.
+`Cost(hθ(x), y) = −ylog(hθ(x)) − (1 − y)log(1 − hθ(x))`
+Notice that when y is equal to 1, then the second term `(1 − y)log(1 − hθ(x))` will be zero and will not affect the result. 
+If y is equal to 0, then the first term `−ylog(hθ(x))` will be zero and will not affect the result.
 
 We can fully write out our entire cost function as follows:
 
-`J(θ)= −1/m ∑i=1m [y(i)log(hθ(x(i)))+(1−y(i))log(1−hθ(x(i)))]`
+`J(θ)= −1/m ∑i = 1 to m [y(i)log(hθ(x(i))) + (1 − y(i))log(1 − hθ(x(i)))]`
 
 A vectorized implementation is:
 
-`h=g(Xθ)J(θ)=1/m⋅(−yTlog(h)−(1−y)Tlog(1−h))`
+`h=g(Xθ)J(θ)=1/m⋅(−yTlog(h) − (1 − y)Tlog( 1− h))`
 
 General form of gradient descent is:
 Repeat {
@@ -536,8 +548,8 @@ Repeat {
 Optimization algorithm:
 Cost function J(θ), want Want minθ J(θ):
 Given θ we have code that can compute 
-- J(θ)
-- α∂/∂θj J(θ) (for j = 0, 1, ..., n)
+- `J(θ)`
+- `α∂/∂θj J(θ)` (for j = 0, 1, ..., n)
 
 Optimization algorithms:
 - gradient descent
@@ -547,9 +559,9 @@ Optimization algorithms:
 
 inorder to compute we need to have a function that returns a cost function and gradient
 θ = [ θ0
-          θ1
-          ... 
-          θn]
+      θ1
+      ... 
+      θn]
           
 function [jval, gradient] = costFunction(θ);
 jval = [code to compute J(θ)];
@@ -568,10 +580,10 @@ jVal = [code to compute J(θ)]
 gradient(1) = CODE_1 % derivative for θ_0
 gradient(2) = CODE_2 % derivative for θ_1
 ```
-so CODE_1 will be 1/m ∑i=1m [(hθ(x(i)) - y(i)) * x0(i)]
-and CODE_2 will be 1/m ∑i=1m [(hθ(x(i)) - y(i)) * x1(i)]
+so CODE_1 will be 1/m ∑i = 1 to m [(hθ(x(i)) - y(i)) * x0(i)]
+and CODE_2 will be 1/m ∑i = 1 to m [(hθ(x(i)) - y(i)) * x1(i)]
 
-to summarize:
+To summarize:
 "Conjugate gradient", "BFGS", and "L-BFGS" are more sophisticated, faster ways to optimize θ that can be used instead of gradient descent. Octave provides them.
 
 We first need to provide a function that evaluates the following two functions for a given input value θ:
