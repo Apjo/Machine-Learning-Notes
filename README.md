@@ -1299,4 +1299,69 @@ f1 ~~ exp(- 0^2 / 2 σ^2) ~~ 1
 else if x is far from l(1), then
 f1 ~~ exp(- large_number^2 / 2 σ^2) ~~ 0
 
+**How to choose landmarks?**
+Given `m` training examples
+(x(1), y(1)), (x(2), y(2)),..., (x(m), y(m))
+we choose the locations of landmarks to be exactly in the same locations of x(1), x(2),..., x(m) i,e. the training examples
+so, l(1)=x(1), l(2)=x(2),.., l(m)=x(m)
 
+Given an example x:
+f1 = similarity(x, l(1))
+f2 = similarity(x, l(m))
+
+we then can represent a feature vector as f = [f0
+                                               f1
+                                              ... 
+                                               fn
+                                               ] 
+                                                
+where f0 = 1
+For training example (x(i), y(i))
+f1(i) = similarity(x(i), l(1))
+f2(i) = similarity(x(i), l(2))
+...
+fm(i) = similarity(x(i), l(m))
+hence, from above there will be one feature where x(i) = l(i) ie. the gaussian kernel exp(-0/2σ^2) = 1
+we can have a feature vector to represent your training example as follows:
+f = [f0(i)
+     f1(i)
+    ... 
+     fm(i)
+    ]
+where f0(i) = 1
+
+## SVM with kernels
+hypothesis: Given x, compute features f ∈ Rm+1, predict "y=1" if ΘT f >= 0
+training:
+`minΘ C[ ∑i=1 to m y(i)cost1(ΘTf(i)) + (1-y(i))cost0(ΘTf(i)) ] + 1/2 ∑j=1 to m Θj^2`
+
+## SVM parameters
+C(= 1/λ) Large C: lower bias, higher variance, more prone to overfitting (small λ)
+         Small C: higher bias, lower variance, more prone to underfitting (large λ)
+
+σ^2 large σ^2: features fi may vary smoothly, higher bias, lower variance
+    small σ^2: features fi may vary less smoothly, lower bias, higher variance
+
+## Using an SVM
+- use SVM software package to solve for parameters Θ
+- Need to specify
+    - choice of parameter C
+    - choice of kernel(similarity function): either linear kernel or gaussian kernel
+In case of multi-class classification, many SVM packages already have built-in multi-class classification functionality
+otherwise, use one-vs-all method. Train K SVMs, one to distinguish y=i from the rest, for i=1,2,..., K, get Θ(1), Θ(2), ..., Θ(k)
+Pick class i with largest (Θ(i))T x
+
+### Logistic regression vs. SVMs
+n = number of features (x ∈ Rn+1)
+m = number of training examples
+if n is large(relative to m):
+ use logistic regression, or SVM without a kernel("linear kernel")
+
+if n is small, m is intermediate:
+ use SVM with Gaussian kernel
+
+if n is small, m is large:
+ create/add more features, then use logistic regression or SVM without a kernel
+ 
+Neural networks likely to work well for most of these settings, but may be slower to train
+ 
