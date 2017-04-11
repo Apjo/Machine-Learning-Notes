@@ -8,8 +8,6 @@ These are the notes I have prepared while doing the online course for Machine Le
     * [Supervised Learning](#define_supervised_learning)
     * [Unsupervised Learning](#define_unsupervised_learning)
 * [Linear Regression](#linear_regression_with_one_variable)
-    * [Cost Function](#cost_function)
-    * [Cost Function Intuition](#cost_function_intuition)
 * [Multivariate Linear Regression](#multivariate_linear_regression)
 * [Gradient Descent](#gradient_descent_algorithm)
     
@@ -76,55 +74,53 @@ We can derive this structure by clustering the data based on relationships among
 With unsupervised learning there is no feedback based on the prediction results.
 
 Example:
-
 **Clustering**: Take a collection of 1,000,000 different genes, and find a way to automatically group these genes into groups that are somehow similar or related by different variables, such as lifespan, location, roles, and so on.
-
 **Non-clustering**: The "Cocktail Party Algorithm", allows you to find structure in a chaotic environment. (i.e. identifying individual voices and music from a mesh of sounds at a cocktail party).
 
-<a name ="model_representation"></a>
-## Model Representation
 <a name ="linear_regression_with_one_variable"></a>
+## Model Representation
 ### Linear regression with 1 variable
-In supervised learning we have a data set called as training set, and our job from this data is to learn
+ - In supervised learning we have a data set called as training set, and our job from this data is to learn.
+ - Recall that in regression problems, we are taking input variables and trying to fit the output onto a continuous expected result function.
+ - Linear regression with one variable is also known as "univariate linear regression."
+
+Univariate linear regression is used when you want to predict a **single output** value y from a **single input** value x. 
+We're doing **supervised learning** here, so that means we already have an idea about what the input/output cause and effect should be.
+
 Notation:
 `m`: no. of training examples
 `x`'s : "input" variable / features
 `y`'s : "output" variable / "target" variable
 `(x, y)`: denotes 1 training example
-`(x^(i), y^(i))`: denotes ith training example, please note the `i` is not a exponentiation, that is just an index into the training set, it just refers
-to the ith row in the training set table.
+`(x^(i), y^(i))`: denotes ith training example, please note the `i` is not a exponentiation, that is just an index into the training set, it just refers to the ith row in the training set table.
 
-so what we get is training set -> learning algo -> h(hypothesis)
-the use of the `hypothesis` is to take for example size of house(x) -> h -> estimated price(estimated value of y)
-so h is a function that maps from x’s to y’s
+So what we get is training set -> learning algo -> h(hypothesis)
+The use of the `hypothesis` is to take for example size of house(x) -> h -> estimated price(estimated value of y). The function `h` maps from x’s to y’s
 
-### How do we represent h?
-`hθ(x) = θ0 + θ1(x)` shorthand: h(x)
-θ0 and θ1 : parameters of the model, this example can be called as linear regression with 1 variable another name for this model is 
-Univariate linear regression
-<a name ="cost_function"></a>
-# Cost Function
-*How to chose values for theta's?*
-Choose `θ0`, and `θ1` so that `hθ(x)` is close to `y` for training examples `(x, y)`
+### The Hypothesis function
+Our hypothesis function has the general form:
+`y^=hθ(x)=θ0+θ1x`
+We give to `hθ(x)` values for `θ0` and `θ1` to get our estimated output `y^`.
+ 
+Note that we try out various values of `θ0` and `θ1` to try to find values which provide the best possible "fit" or the most representative "straight line" through the data points mapped on the x-y plane.
 
-`1/2 * m * [ sum from i = 1 to m (h(x(i) ) - y(i))^2]`  where m stands for no.of of training examples
-
+### Cost Function
+We can measure the accuracy of our hypothesis function by using a cost function. This takes an average of all the results of the hypothesis with inputs from x's compared to the actual output y's.
 more formally we write it as:
 `J(θ0, θ1) = 1/2 * m * [ sum from i = 1 to m (h(x(i) ) - y(i))^2]` i.e. minimize J(θ0,θ1) over θ0, θ1
 
-<a name ="cost_function_intuition"></a>
-### Cost function intuition
 simplified version of the previous cost function:
 `hθ(x) = θ1(x)`
 `J(θ1) = 1/2 * m * [sum from i = 1 through m (θ(x(i)) - y(i))^2]`
 
 minimize J(θ1)
 θ0 = 0 means choosing only hypothesis function that passes through origin
+*Why do we divide by `m`* ?
+Ans: One typical reason to normalize by `m` is so that we can view the cost function as an approximation to the "generalization error", which is the expected square loss on a randomly chosen new example.
 
-Difference between *hypothesis function* and *cost function*:
 
-- **hypothesis**: for a fixed `θ1`, is a function of x 
-- `J(θ1)` : is a function of the param `θ1` which controls the slope of the line
+- **Hypothesis**: for a fixed `θ1`, is a function of x 
+- Cost function `J(θ1)` : is a function of the param `θ1` which controls the slope of the line
 Each value of `θ1` corresponds to a different hypothesis or to a different straight line and we could derive a different value of `J(θ1)`
 
 <a name ="gradient_descent_algorithm"></a>
@@ -1365,3 +1361,55 @@ if n is small, m is large:
  
 Neural networks likely to work well for most of these settings, but may be slower to train
  
+# Clustering
+## Unsupervised Learning: Introduction
+- In unsupervised learning the training set is of the form {x(1), x(2), x(3), ..., x(m)} without labels y(i)
+- Clustering is an example of unsupervised learning
+- In unsupervised learning, you are given an unlabeled dataset and are asked to find "structure" in the data
+
+## K-means algorithm
+- Randomly initialize 2 points named as cluster centroids, we have 2 of them because we want to group data into 2 clusters
+- Step 1:
+    * Cluster assignment step:
+        - go through each data points, and determine which data point is closer to the above centroid and assign them to cluster centroid
+    * Move cluster centroids to their means/ move centroid step
+        - calculate the average of points or the mean and move the cluster centroid there
+- Step 2: repeat step1 till all the points are present in some cluster
+
+More formally
+Input:
+
+- K (no.of clusters)
+- training set {x(1), x(2), x(3), ..., x(m)} x(i) ∈ Rn (drop x0=1 convention)
+- randomly initialize K cluster centroids u1, u2, u3,..., uk ∈ Rn
+- repeat {
+    //cluster assignment step
+    for i=1 to m
+     c(i) := index (from 1 to K) of cluster centroid closest to x(i), min k|| x(i) - uk || ^2
+     //move centroid
+    for k = 1 to K
+     uk = average (mean) of points assigned to cluster k
+  }
+    
+## Optimization objective
+once again,
+
+* c(i): index of cluster (1, 2, ..., K) to which example x(i) is currently assigned
+* uk: cluster centroid k (uk ∈ Rn)
+* uc(i): cluster centroid of cluster to which example x(i) has been assigned
+eg: let us say x(i) = 5, c(i) = 5 i.e. uc(i) = u5
+
+Optimization objective:
+`J(c(1), ..., c(m), u1,..., uk) = 1/m ∑i=1 to m || x(i) - uc(i) || ^2`
+
+K-means algorithm is carrying out optimization in the ints steps, for example in the first step i.e. the cluster assignment step, k-means tries to minimize the cost function
+J(...) w.r.t c(1), ..., c(m) keeping u1,..., uk fixed
+and in the second step minizes J(...) w.r.t u1,..., uk
+We can use this to debug our algorith to make sure our k-means is working correctly
+
+## Random Initialization
+When running k-means following are the tasks that can eb done:
+1. the number of cluster centroids K should be less than the number of training examples m
+2. Randomly pick K training examples
+3. Set u1,..., uk equal to these K examples
+
