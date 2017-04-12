@@ -1412,4 +1412,27 @@ When running k-means following are the tasks that can eb done:
 1. the number of cluster centroids K should be less than the number of training examples m
 2. Randomly pick K training examples
 3. Set u1,..., uk equal to these K examples
+i.e. Pick k distinct random integers i1, i2, ..., ik from 1 to m, and then set u1 = x(i1), u2=x(i2),..., uk=x(ik)
 
+- k-means can be converging to different solutions depending on exactly how the clusters were initialized depending on the random initialization
+- k-means can end up at local optima
+- k-means can get stuck at different local optima, to avoid this we can try multiple random initializations
+
+we perform random initialization as follows:
+```
+for i = 1 to 100 {
+    randomly initialize k-means
+    run k-means. Get c(1), ..., c(m), u1,..., uk
+    compute cost function(distortion)
+    J(c(1), ..., c(m), u1,..., uk)
+}
+```
+finally we pick one that gives us the lowest cost, it seems that if you are running k-means with small no.of clusters(like 2-10) can make sure to find a 
+better local optima, make sure you find better clustering data.
+
+### Choosing the number of clusters
+How to choose the value of parameter K
+1. The elbow-method
+2. if we are running for later downstream purposes, we will evaluate k-means based on a metric for how well it performs for that later purpose
+to summarize for the most part the number of clusters (K) is still chosen by hand or human insight, always ask the question *what purpose are you running k-means for?*
+and then to think what is the no.of clusters K, that serves the purpose
