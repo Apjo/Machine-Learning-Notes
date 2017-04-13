@@ -1404,8 +1404,8 @@ Optimization objective:
 
 K-means algorithm is carrying out optimization in the ints steps, for example in the first step i.e. the cluster assignment step, k-means tries to minimize the cost function
 J(...) w.r.t c(1), ..., c(m) keeping u1,..., uk fixed
-and in the second step minizes J(...) w.r.t u1,..., uk
-We can use this to debug our algorith to make sure our k-means is working correctly
+and in the second step minimizes J(...) w.r.t u1,..., uk
+We can use this to debug our algorithm to make sure our k-means is working correctly
 
 ## Random Initialization
 When running k-means following are the tasks that can eb done:
@@ -1436,3 +1436,10 @@ How to choose the value of parameter K
 2. if we are running for later downstream purposes, we will evaluate k-means based on a metric for how well it performs for that later purpose
 to summarize for the most part the number of clusters (K) is still chosen by hand or human insight, always ask the question *what purpose are you running k-means for?*
 and then to think what is the no.of clusters K, that serves the purpose
+
+## Dimensionality Reduction
+### Motivation 1: Data Compression
+Reduce data from 2D to 1D
+Suppose we apply dimensionality reduction to a dataset of m examples {x(1), x(2), ..., x(m)}, where x(i) ∈ Rn, as a result of this we get out
+A lower dimensional dataset {z(1), z(2),..., z(m)} of m examples where z(i) ∈ Rk for some value of k and k <= n
+### Motivation 1: Data Visualization
