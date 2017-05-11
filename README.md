@@ -1,18 +1,14 @@
 # Machine Learning, Stanford University, Andrew Ng
-
 These are the notes I have prepared while doing the online course for Machine Learning from Coursera taught by Dr. Andrew Ng from Stanford University.
 
 ### Table of Contents
-* [Introduction](#introduction)
-    * [What is Machine Learning](#define_machine_learning)
+* [What is Machine Learning](#define_machine_learning)
     * [Supervised Learning](#define_supervised_learning)
     * [Unsupervised Learning](#define_unsupervised_learning)
 * [Linear Regression](#linear_regression_with_one_variable)
 * [Multivariate Linear Regression](#multivariate_linear_regression)
 * [Gradient Descent](#gradient_descent_algorithm)
-    
-<a name="introduction"></a>
-# Introduction
+* [More Machine Learning Resources](#ml_learing_resources)
 <a name ="define_machine_learning"></a>
 ## What is Machine Learning
 
@@ -35,33 +31,29 @@ Supervised learning and Unsupervised learning.
 
 <a name ="define_supervised_learning"></a>
 ## Supervised Learning
-
-- Give algorithm data sets where "right answers" are given
-- *Regression problem* - goal is to produce continuous output
-- *Classification problem* - goal is to generate discrete valued output
+ - Give algorithm data sets where "right answers" are given
+ - *Regression problem* - goal is to produce continuous output
+ - *Classification problem* - goal is to generate discrete valued output
 
 To summarize:
 
-In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.
+ In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.
 
-- Supervised learning problems are categorized into `"regression"` and `"classification"` problems. 
+ - Supervised learning problems are categorized into `"regression"` and `"classification"` problems. 
 
-- In a regression problem, we are trying to `predict results within a continuous output`, meaning that we are trying to map input variables to some continuous function. 
+ - In a regression problem, we are trying to `predict results within a continuous output`, meaning that we are trying to map input variables to some continuous function. 
 
-- In a classification problem, we are instead trying to `predict results in a discrete output`. In other words, we are trying to map input variables into discrete categories.
+ - In a classification problem, we are instead trying to `predict results in a discrete output`. In other words, we are trying to map input variables into discrete categories.
 
 Example 1:
-
-Given data about the size of houses on the real estate market, try to predict their price. 
-Price as a function of size is a continuous output, so this is a regression problem.
-
-We could turn this example into a classification problem by instead making our output about whether the house "sells for more or less than the asking price." 
-Here we are classifying the houses based on price into two discrete categories.
+ Given data about the size of houses on the real estate market, try to predict their price. 
+ Price as a function of size is a continuous output, so this is a regression problem.
+ We could turn this example into a classification problem by instead making our output about whether the house "sells for more or less than the asking price." 
+ Here we are classifying the houses based on price into two discrete categories.
 
 Example 2:
-
- * Regression - Given a picture of a person, we have to predict their age on the basis of the given picture
- * Classification - Given a patient with a tumor, we have to predict whether the tumor is malignant or benign.
+ Regression:     Given a picture of a person, we have to predict their age on the basis of the given picture
+ Classification: Given a patient with a tumor, we have to predict whether the tumor is malignant or benign.
  
 <a name ="define_unsupervised_learning"></a>
 ## Unsupervised learning
@@ -69,9 +61,9 @@ Example 2:
 Unsupervised learning allows us to approach problems with little or no idea what our results should look like. 
 We can derive structure from data where we don't necessarily know the effect of the variables.
 
-We can derive this structure by clustering the data based on relationships among the variables in the data.
+We can derive this structure by *clustering* the data based on relationships among the variables in the data.
 
-With unsupervised learning there is no feedback based on the prediction results.
+With unsupervised learning there is *no feedback* based on the prediction results.
 
 Example:
 **Clustering**: Take a collection of 1,000,000 different genes, and find a way to automatically group these genes into groups that are somehow similar or related by different variables, such as lifespan, location, roles, and so on.
@@ -87,14 +79,15 @@ Example:
 Univariate linear regression is used when you want to predict a **single output** value y from a **single input** value x. 
 We're doing **supervised learning** here, so that means we already have an idea about what the input/output cause and effect should be.
 
-Notation:
+Notation we are going to use for Linear regression:
 `m`: no. of training examples
 `x`'s : "input" variable / features
 `y`'s : "output" variable / "target" variable
 `(x, y)`: denotes 1 training example
 `(x^(i), y^(i))`: denotes ith training example, please note the `i` is not a exponentiation, that is just an index into the training set, it just refers to the ith row in the training set table.
 
-So what we get is training set -> learning algo -> h(hypothesis)
+To describe the supervised learning problem slightly more formally, our goal is, given a `training set`, to learn a function `h : X → Y` so that h(x) is a “good” predictor for the corresponding value of y.
+When the target variable that we’re trying to predict is continuous, such as in our housing example, we call the learning problem a regression problem
 The use of the `hypothesis` is to take for example size of house(x) -> h -> estimated price(estimated value of y). The function `h` maps from x’s to y’s
 
 ### The Hypothesis function
@@ -107,11 +100,11 @@ Note that we try out various values of `θ0` and `θ1` to try to find values whi
 ### Cost Function
 We can measure the accuracy of our hypothesis function by using a cost function. This takes an average of all the results of the hypothesis with inputs from x's compared to the actual output y's.
 more formally we write it as:
-`J(θ0, θ1) = 1/2 * m * [ sum from i = 1 to m (h(x(i) ) - y(i))^2]` i.e. minimize J(θ0,θ1) over θ0, θ1
+`J(θ0, θ1) = 1/2 * m * [ ∑ i = 1 to m (h(x(i) ) - y(i))^2]` i.e. minimize J(θ0,θ1) over θ0, θ1
 
 simplified version of the previous cost function:
 `hθ(x) = θ1(x)`
-`J(θ1) = 1/2 * m * [sum from i = 1 through m (θ(x(i)) - y(i))^2]`
+`J(θ1) = 1/2 * m * [∑ i = 1 to m (θ(x(i)) - y(i))^2]`
 
 minimize J(θ1)
 θ0 = 0 means choosing only hypothesis function that passes through origin
@@ -139,7 +132,7 @@ repeat until convergence {
 where 
 := used for assignment
 = is used for truth assertion
-alpha: learning rate
+α: learning rate
 ```
 we should be updating θ0 and θ1 simultaneously as follows:
 
@@ -1443,3 +1436,181 @@ Reduce data from 2D to 1D
 Suppose we apply dimensionality reduction to a dataset of m examples {x(1), x(2), ..., x(m)}, where x(i) ∈ Rn, as a result of this we get out
 A lower dimensional dataset {z(1), z(2),..., z(m)} of m examples where z(i) ∈ Rk for some value of k and k <= n
 ### Motivation 1: Data Visualization
+It is better to visualize data in 2d or 3d, and make more sense of it once dimensionality reduction has been done
+
+## Principal Component Analysis
+Reduce form 2D to 1D: find a direction (a vector u(1) ∈ Rn) onto which to project the data so as to minimize the projection error
+Reduce from n-dimension to k-dimension: Find k vectors u(1), u(2),..., u(k) onto  which to project the data, so as to minimize the projection error
+
+### Algorithm:
+Before applying PCA there is a pre-processing step that should be performed
+training set: x(1), x(2), ..., x(m)
+### Preprocessing(feature scaling/normalization)
+uj = 1/m ∑i=1 to m xj(i)
+Replace each xj(i) with xj - uj
+If different features on different scales(e.g., x1 = size of house, x2 = no.of bedrooms), scale features to have comparable range of values
+### Principal Component Analysis Algorithm:
+Reduce data from n-dimensions to k-dimensions
+Compute "covariance matrix":
+ `Sigma(∑) = 1/m ∑ i = 1 to m (x(i))(x(i))T`
+Compute "eigen vectors" of matrix ∑:
+ `[U, S, V] = svd(Sigma)`, we get
+  U = [u(1) u(2) ... u(n)] ∈ Rn * n
+We use the first `k` columns from the matrix U to get u(1) to u(k)
+Now we wold like to come up with a way to go from your original dataset x ∈ Rn and find a lower dimensional representation z ∈ Rk.
+Take first k colums of the U matrix which is a n * k matrix, call it Ureduce.
+And the way we compose `z` is 
+`z = Ureduce^T * x`, UreduceT will be a k * n matrix, and x can be your training set, cross-validation set of n * 1 matrix, hence z will be a k * 1 matrix
+### PCA summary
+After mean normalization(ensure every feature has 0 mean) and optionally feature scaling:
+   `Sigma(∑) = 1/m ∑ i = 1 to m (x(i))(x(i))T`
+   `[U, S, V] = svd(Sigma)` (svd = singular value decomposition)
+   `Ureduce = U(:, 1:k)`
+   `z = Ureduce' * x`
+
+## Applying PCA   
+### Reconstruction from compressed Representation
+suppose we want to go from a compresses representation back to our original representation of data, i.e.
+we have z = UreduceT x, we want xapprox ∈ Rn which is given by,
+`Xapprox = Ureduce . z`, where Ureduce is a n * k matrix, and z is a k * 1 matrix, so Xapprox will be a n * 1 matrix
+
+### Choosing the number of principal components
+average squared projection error: `1/m ∑ i = 1 to m || x(i) - xapprox(i) ||^2`
+total variation in the data: `1/m ∑ i = 1 to m || x(i) ||^2`
+choose the value of k, choose the smallest value so that 
+avg. squared error / total variation <= 0.01 (1%)
+Algorithm:
+ try PCA with k = 1
+ compute Ureduce, z(1), z(2), ..., z(m), xapprox(1), ..., xapprox(m)
+ check if avg. squared error / total variation <= 0.01
+ 
+if the value of k is not <=0.01 you increment the value of k by 1 and re-run the entire algorithm 
+
+Or using SVD
+[U, S, V] = svd(Sigma)
+the S matrix is a square matrix, whose diagonal elements are non-zero
+we now compute k as follows
+`1 - ∑ i = 1 to k Sii / ∑ i = 1 to n Sii` <= 0.01 or,
+`∑ i = 1 to k Sii / ∑ i = 1 to n Sii` >= 0.99
+in this algorithm you just run svd once, and check for value of k
+
+Note: we said that PCA chooses direction u(1)(or k directions u(1),..., u(k)) onto which to project the data so as to minimize the (squared) projection error.
+Another way to say is that PCA tries to minimize:
+`1/m ∑ i = 1 to m || x(i) - xapprox(i) ||^2` 
+
+### Advice for applying PCA
+Supervised learning speedup
+(x(1), y(1)), (x(2), y(2)), ..., (x(m), y(m))
+extract inputs:
+ unlabeled dataset: x(1), x(2), ..., x(m) ∈ Rn where n can be very large for ex. 10000
+ we apply PCA to generate reduced dimension dataset we will call them as 
+ z(1), z(2), ..., z(m) ∈ R1000 which will be our new training set, 
+ (z(1), y(1)), (z(2), y(2)), ..., (z(m), y(m))
+Note: only apply PCA on your training set
+### Applications of PCA
+- compression
+    - reduce memory/disk needed to store data
+    - speed up learning algorithm
+for the above 2 cases we choose k by % of variance retain    
+- Visualization
+for this case we choose k = 2 or k = 3
+### Bad use of PCA: To prevent overfitting
+Use z(i) instead of x(i) to reduce the number of features to k < n, thus meaning less features less likely to overfit
+this is actually a bad approach and is not recommended, instead use regularization
+`minΘ 1/2m [ ∑i=1 to m (hΘ(x(i)) - y(i))^2 ] + λ/2m ∑j=1 to m Θj^2`
+The reason this is not recommended is that if you observe PCA does not use the labels `y` since you only use x(i) to find a lower dimensional approximation of your data
+i.e. it throws away a piece of information of your data or reduces the dimension of data. There can be a value in that dimension
+Before using PCA, instead of reducing the dimension of data, train your learning algorithm on your original data. Only if your algorithm is slow, requires large amount of data
+or only using x(i) doesn't work, then only go for PCA.
+So, recommended/good applications of PCA:
+
+ - to compress data so it takes up less computer memory/disk space
+ - to reduce the dimension of the input data so as to speed up a learning algorithm
+ - to visualize high-dimensional data(by choosing k = 2 or k = 3)
+       
+# Density Estimation
+## Anomaly Detection
+Given a dataset {x(1), x(2),..., x(m)} assuming that these examples are non-anamolous
+We want an algorithm that tells us whether xtest is anomalous
+Given the above training set, we are going to build a model p(x), i.e. probability of x, so
+ if p(xtest) < epsilon(ϵ) -> we flag this as an anomaly, also p(xtest) > ϵ -> OK
+examples:
+ - fraud detection: identify unusual users by checking which have p(x) < ϵ
+ - manufacturing
+ - monitoring computers in a datacenter
+Note: If our anomaly detector is flagging too many anomalous examples, then we need to decrease our threshold ϵ
+      
+### Gaussian distribution
+The Gaussian Distribution is a familiar bell-shaped curve that can be described by a function `N(μ,σ^2)`
+Let `x ∈ ℝ`. If the probability distribution of x is Gaussian with mean `μ`, variance `σ^2`, then:
+
+`x ∼ N(μ,σ2)`
+The little `∼` or 'tilde' can be read as "distributed as."
+The Gaussian Distribution is parameterized by a mean and a variance.
+
+Mu, or μ, describes the center of the curve, called the mean. The width of the curve is described by sigma, or σ, called the standard deviation.
+
+The full function is as follows:
+
+`p(x;μ,σ2) = 1/σ(√2π)e^−1/2 * (x−μ/σ)^2`
+
+### Parameter estimation
+Given a dataset, we want to estimate what are the values of `μ` and `σ^2`
+We can estimate the parameter `μ` from a given dataset by simply taking the average of all the examples:
+
+`μ = 1/m ∑i = 1 to m x(i)`
+We can estimate the other parameter, σ2, with our familiar squared error formula:
+
+`σ^2 = 1/m ∑i = 1 to m (x(i)−μ)^2`
+
+### Algorithm
+Given a training set of examples, {x(1),…,x(m)} where each example is a vector, x∈ℝn.
+
+p(x)=p(x1;μ1,σ21)p(x2;μ2,σ22)⋯p(xn;μn,σ2n)
+In statistics, this is called an "independence assumption" on the values of the features inside training example x.
+
+More compactly, the above expression can be written as follows:
+
+=`∏j=1 to n p(xj;μj,σ2j)`
+
+1. Choose features xi that you think might be indicative of anomalous examples. Fit parameters μ1,…,μn,σ21,…,σ2n
+   
+2. Calculate μj = 1/m ∑i = 1 to m xj(i)
+   Calculate σj^2 = 1/m ∑i = 1 to m (x(i)j−μj)^2   
+
+3. Given a new example x, compute p(x):
+   
+   `p(x)=∏ j = 1 to n p(xj;μj,σj^2)=∏j = 1 to n 1/√2πσj exp(−(xj−μj)^2/2σj^2)` Anomaly if p(x)<ϵ
+
+A vectorized version of the calculation for μ is `μ = 1/m ∑i=1 to m x(i)`. You can vectorize σ2 similarly.
+
+### Developing and evaluating an anomaly detection system
+To evaluate our learning algorithm, we take some labeled data, categorized into anomalous and non-anomalous examples ( y = 0 if normal, y = 1 if anomalous).
+Among that data, take a large proportion of good, non-anomalous data for the training set on which to train p(x).
+
+Then, take a smaller proportion of mixed anomalous and non-anomalous examples (you will usually have many more non-anomalous examples) for your cross-validation and test sets.
+
+For example, we may have a set where 0.2% of the data is anomalous. 
+We take 60% of those examples, all of which are good (y=0) for the training set. 
+We then take 20% of the examples for the cross-validation set (with 0.1% of the anomalous examples) and another 20% from the test set (with another 0.1% of the anomalous).
+In other words, we split the data 60/20/20 training/CV/test and then split the anomalous examples 50/50 between the CV and test sets.
+
+**Algorithm Evaluation**
+Fit model p(x) on training set {x(1),…,x(m)}
+On a cross validation/test example x, predict:
+
+If p(x) < ϵ (anomaly), then y=1
+
+If p(x) ≥ ϵ (normal), then y=0
+
+Possible evaluation metrics (see "Machine Learning System Design" section):
+
+True positive, false positive, false negative, true negative.
+Precision/recall
+F1 score
+Note that we use the *cross-validation set to choose parameter ϵ*
+
+Q: Is classification accuracy a good way to measure the algorithm's performance?
+A: *No, because of skewed classes(since an algorithm that always predicts y=0 will have high accuracy)*
+
+### Anomaly detection vs. Supervised Learning
