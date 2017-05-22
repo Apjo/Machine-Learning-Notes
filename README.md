@@ -1614,3 +1614,73 @@ Q: Is classification accuracy a good way to measure the algorithm's performance?
 A: *No, because of skewed classes(since an algorithm that always predicts y=0 will have high accuracy)*
 
 ### Anomaly detection vs. Supervised Learning
+When do we use anomaly detection and when do we use supervised learning?
+
+Use anomaly detection:
+
+We have a very small number of positive examples (y=1 ... 0-20 examples is common) and a large number of negative (y=0) examples.
+We have many different "types" of anomalies and it is hard for any algorithm to learn from positive examples what the anomalies look like; future anomalies may look nothing like any of the anomalous examples we've seen so far.
+
+Use supervised learning:
+
+We have a large number of both positive and negative examples. In other words, the training set is more evenly divided into classes.
+We have enough positive examples for the algorithm to get a sense of what new positives examples look like. The future positive examples are likely similar to the ones in the training set.
+
+### Choosing What Features to Use
+Suppose your anomaly detection algorithm is performing poorly and outputs a large value of p(x) for many normal examples and for many anomalous examples in your
+C.V dataset, then you would try coming up with more features to distinguish between the normal and the anomalous examples.
+The features will greatly affect how well your anomaly detection algorithm works.
+
+We can check that our features are gaussian by plotting a histogram of our data and checking for the bell-shaped curve.
+
+Some transforms we can try on an example feature x that does not have the bell-shaped curve are:
+
+log(x)
+log(x+1)
+log(x+c) for some constant
+x√
+x1/3
+We can play with each of these to try and achieve the gaussian shape in our data.
+
+There is an error analysis procedure for anomaly detection that is very similar to the one in supervised learning.
+
+Our goal is for p(x) to be large for normal examples and small for anomalous examples.
+
+One common problem is when p(x) is similar for both types of examples. 
+In this case, you need to examine the anomalous examples that are giving high probability in detail and try to figure out new features that will better distinguish the data.
+
+In general, choose features that might take on unusually large or small values in the event of an anomaly.
+
+## Recommender Systems
+### Problem Formulation
+Recommendation is currently a very popular application of machine learning.
+
+Say we are trying to recommend movies to customers. We can use the following definitions
+
+nu= number of users
+nm= number of movies
+r(i,j)=1 if user j has rated movie i
+y(i,j)= rating given by user j to movie i (defined only if r(i,j)=1)
+
+### Content Based Recommendations
+We can introduce two features, x1 and x2 which represents how much romance or how much action a movie may have (on a scale of 0−1).
+
+One approach is that we could do linear regression for every single user. For each user j, learn a parameter θ(j)∈ℝ3. Predict user j as rating movie i with (θ(j))Tx(i) stars.
+
+θ(j)= parameter vector for user j
+x(i)= feature vector for movie i
+For user j, movie i, predicted rating: (θ(j))T(x(i))
+m(j)= number of movies rated by user j
+To learn θ(j), we do the following
+
+`minθ(j)=1/2 ∑i:r(i,j) = 1 ((θ(j))T(x(i)) − y(i,j))^2 + λ/2 ∑k = 1 to n (θ(j)k)^2`
+This is our familiar linear regression. The base of the first summation is choosing all i such that r(i,j)=1.
+
+To get the parameters for all our users, we do the following:
+minθ(1),…,θ(nu) = `1/2 ∑j = 1 to nu ∑i:r(i,j) = 1 ((θ(j))T(x(i)) − y(i,j))^2 + λ/2 ∑j=1nu ∑k=1 to n (θ(j)k)^2`
+
+We can apply our linear regression gradient descent update using the above cost function.
+
+The only real difference is that we eliminate the constant 1m.
+
+## Collaborative Filtering
