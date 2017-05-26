@@ -1677,10 +1677,150 @@ To learn θ(j), we do the following
 This is our familiar linear regression. The base of the first summation is choosing all i such that r(i,j)=1.
 
 To get the parameters for all our users, we do the following:
-minθ(1),…,θ(nu) = `1/2 ∑j = 1 to nu ∑i:r(i,j) = 1 ((θ(j))T(x(i)) − y(i,j))^2 + λ/2 ∑j=1nu ∑k=1 to n (θ(j)k)^2`
+minθ(1),…,θ(nu) = `1/2 ∑j = 1 to nu ∑i:r(i,j) = 1 ((θ(j))T(x(i)) − y(i,j))^2 + λ/2 ∑j=1 to nu ∑k=1 to n (θ(j)k)^2`
 
 We can apply our linear regression gradient descent update using the above cost function.
 
 The only real difference is that we eliminate the constant 1m.
 
 ## Collaborative Filtering
+It can be very difficult to find features such as "amount of romance" or "amount of action" in a movie. To figure this out, we can use feature finders.
+
+We can let the users tell us how much they like the different genres, providing their parameter vector immediately for us.
+
+To infer the features from given parameters, we use the squared error function with regularization over all the users:
+
+`minx(1),…,x(nm)1/2 ∑i = 1 to nm ∑j:r(i,j)=1 ((θ(j))Tx(i) − y(i,j))^2 + λ/2 ∑i = 1 to nm ∑k = 1 to n (x(i)k)^2`
+You can also **randomly** guess the values for theta to guess the features repeatedly. 
+You will actually converge to a good set of features.
+
+### Collaborative Filtering Algorithm
+To speed things up, we can simultaneously minimize our features and our parameters:
+
+`J(x,θ)=1/2 ∑(i,j):r(i,j) = 1 ((θ(j))Tx(i) − y(i,j))^2 + λ/2 ∑ i = 1 to nm ∑k = 1 to n (x(i)k)^ 2 + λ/2 ∑j=1 to nu ∑k=1 to n(θ(j)k)^2`
+We have combined the cost function for theta and the cost function for x.
+
+Because the algorithm can learn them itself, the bias units where x0=1 have been removed, therefore x∈ℝn and θ∈ℝn.
+
+These are the steps in the algorithm:
+
+Initialize x(i),...,x(nm),θ(1),...,θ(nu) to small random values. This serves to break symmetry and ensures that the algorithm learns features x(i),...,x(nm) that are different from each other.
+Minimize J(x(i),...,x(nm),θ(1),...,θ(nu)) using gradient descent (or an advanced optimization algorithm).
+E.g. for every j=1,...,nu,i=1,...nm:
+`x(i)k:=x(i)k−α( ∑j:r(i,j) = 1 ((θ(j))Tx(i) − y(i,j))θ(j)k + λx(i)k)`
+`θ(j)k:=θ(j)k−α( ∑i:r(i,j) = 1 ((θ(j))Tx(i) − y(i,j))x(i)k + λθ(j)k)`
+For a user with parameters θ and a movie with (learned) features x, predict a star rating of θTx.   
+
+### Vectorization: Low Rank Matrix Factorization
+Given matrices X (each row containing features of a particular movie) and Θ (each row containing the weights for those features for a given user), then the full matrix Y of all predicted ratings of all movies by all users is given simply by: `Y=XΘT`.
+
+Predicting how similar two movies i and j are can be done using the distance between their respective feature vectors x. 
+Specifically, we are looking for a small value of `||x(i)−x(j)||`.
+
+### Implementation Detail: Mean Normalization
+If the ranking system for movies is used from the previous lectures, then new users (who have watched no movies), will be assigned new movies incorrectly. Specifically, they will be assigned θ with all components equal to zero due to the minimization of the regularization term. That is, we assume that the new user will rank all movies 0, which does not seem intuitively correct.
+
+We rectify this problem by normalizing the data relative to the mean. First, we use a matrix Y to store the data from previous ratings, where the ith row of Y is the ratings for the ith movie and the jth column corresponds to the ratings for the jth user.
+
+We can now define a vector
+μ=[μ1,μ2,…,μnm]
+such that
+
+μi=∑j:r(i,j)=1Yi,j / ∑jr(i,j)
+Which is effectively the mean of the previous ratings for the ith movie (where only movies that have been watched by users are counted). We now can normalize the data by subtracting u, the mean rating, from the actual ratings for each user (column in matrix Y):
+
+As an example, consider the following matrix Y and mean ratings μ:
+Y = [5 5 0 0
+     4 ? ? 0
+     0 0 5 4
+     0 0 5 0]
+μ=[2.5
+   2
+   2.25
+   1.25]
+
+Y' = [2.5 2.5 -2.5 -2.5
+      2   ?    ?   -2
+     -2.25 -2.25 3.75 1.25
+     -1.25 -1.25 3.75 -1.25]   
+
+Now we must slightly modify the linear regression prediction to include the mean normalization term:
+
+`(θ(j))Tx(i) + μi`
+Now, for a new user, the initial predicted values will be equal to the μ term instead of simply being initialized to zero, which is more accurate.
+
+## Learning with Large Datasets
+We mainly benefit from a very large dataset when our algorithm has high variance when m is small. 
+Recall that if our algorithm has high bias, more data will not have any benefit.
+
+Datasets can often approach such sizes as m = 100,000,000. In this case, our gradient descent step will have to make a summation over all one hundred million examples. We will want to try to avoid this -- the approaches for doing so are described below.
+
+### Stochastic Gradient Descent
+Stochastic gradient descent is an alternative to classic (or batch) gradient descent and is more efficient and scalable to large data sets.
+
+Stochastic gradient descent is written out in a different but similar way:
+`cost(θ,(x(i),y(i))) = 1/2 (hθ(x(i)) − y(i))^2`
+The only difference in the above cost function is the elimination of the m constant within 1/2
+`Jtrain(θ) = 1/m ∑i = 1 to m cost(θ,(x(i), y(i)))`
+Jtrain is now just the average of the cost applied to all of our training examples.
+The algorithm is as follows
+
+ - Randomly 'shuffle' the dataset
+ - For i=1…m
+ `Θj: = Θj − α(hΘ(x(i)) − y(i))⋅x(i)j`
+This algorithm will only try to fit one training example at a time. 
+This way we can make progress in gradient descent without having to scan all `m` training examples first. 
+When the training size `m` is very large stochastic gradient descent can be much faster 
+Stochastic gradient descent will be unlikely to converge at the global minimum and will instead wander around it randomly, but usually yields a result that is close enough. 
+Stochastic gradient descent will usually take 1-10 passes through your data set to get near the global minimum.
+The cost function should go down with every iteration of batch gradient descent but not necessarily with stochastic gradient descent
+
+### Mini-Batch Gradient Descent
+Mini-batch gradient descent can sometimes be even faster than stochastic gradient descent. 
+Instead of using all m examples as in batch gradient descent, and instead of using only 1 example as in stochastic gradient descent, we will use some in-between number of examples b.
+
+Typical values for b range from 2-100 or so.
+
+For example, with b=10 and m=1000:
+For i=1,11,21,31,…,991
+`θj:=θj − α 1/10 ∑k=i to i+9 (hθ(x(k)) − y(k))x(k)j`
+We're simply summing over ten examples at a time. 
+The advantage of computing more than one example at a time is that we can use vectorized implementations over the b examples.
+
+### Stochastic Gradient Descent Convergence
+How do we choose the learning rate α for stochastic gradient descent? Also, how do we debug stochastic gradient descent to make sure it is getting as close as possible to the global optimum?
+
+One way is to plot the average cost of the hypothesis applied to every 1000 or so training examples. 
+We can compute and save these costs during the gradient descent iterations.
+
+With a smaller learning rate, it is possible that you may get a slightly better solution with stochastic gradient descent. 
+That is because stochastic gradient descent will oscillate and jump around the global minimum, and it will make smaller random jumps with a smaller learning rate.
+
+If you increase the number of examples you average over to plot the performance of your algorithm, the plot's line will become smoother.
+
+With a very small number of examples for the average, the line will be too noisy and it will be difficult to find the trend.
+
+One strategy for trying to actually converge at the global minimum is to **slowly decrease α** over time. For example
+ `α=const1/iterationNumber + const2`
+
+However, this is not often done because people don't want to have to fiddle with even more parameters.
+
+### Online Learning
+With a continuous stream of users to a website, we can run an endless loop that gets (x,y), where we collect some user actions for the features in x to predict some behavior y.
+
+You can update θ for each individual (x,y) pair as you collect them. 
+This way, you can adapt to new pools of users, since you are continuously updating theta.
+### Map Reduce and Data Parallelism
+We can divide up batch gradient descent and dispatch the cost function for a subset of the data to many different machines so that we can train our algorithm in parallel.
+You can split your training set into z subsets corresponding to the number of machines you have. On each of those machines calculate
+∑i=p to q(hθ(x(i)) − y(i))⋅x(i)j, where we've split the data starting at p and ending at q.
+MapReduce will take all these dispatched (or 'mapped') jobs and 'reduce' them by calculating:
+
+Θj:=Θj−α1/z(temp(1)j + temp(2)j+⋯+temp(z)j)
+For all j=0,…,n.
+
+This is simply taking the computed cost from all the machines, calculating their average, multiplying by the learning rate, and updating theta.
+
+Your learning algorithm is MapReduceable if it can be expressed as computing sums of functions over the training set. Linear regression and logistic regression are easily parallelizable.
+
+For neural networks, you can compute forward propagation and back propagation on subsets of your data on many machines. Those machines can report their derivatives back to a 'master' server that will combine them.
