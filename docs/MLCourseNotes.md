@@ -6,9 +6,85 @@ These are the notes I have prepared while doing the online course for Machine Le
     * [Supervised Learning](#define_supervised_learning)
     * [Unsupervised Learning](#define_unsupervised_learning)
 * [Linear Regression](#linear_regression_with_one_variable)
-* [Multivariate Linear Regression](#multivariate_linear_regression)
-* [Gradient Descent](#gradient_descent_algorithm)
-* [More Machine Learning Resources](#ml_learing_resources)
+    * [Cost Function](#linear_regression_with_one_variable_cost_function)
+    * [Gradient Descent](#gradient_descent_algorithm)
+    * [Gradient Descent Intuition](#gradient_descent_intuition)
+    * [Gradient Descent For Linear Regression](#gradient_descent_linear_regression)
+* [Linear regression with multiple variable](#linear_regression_with_multiple_variables)
+    * [Multivariate Linear Regression](#multivariate_linear_regression)
+    * [Gradient descent in practice 1: Feature Scaling](#gradient_descent_featurescaling)
+    * [Gradient descent in practice 2: Learning Rate](#gradient_descent_learningrate)
+    * [Features and Polynomial Regression](#features_polynomial_regression)
+    * [Normal Equation](#normal_equation)
+ * [Logistic Regression](#logistic_regression)
+    * [Hypothesis Representation](#hypothesis_representation)
+    * [Decision Boundary](#decision_boundary)
+    * [Cost Function](#logistic_regression_cost_function)
+    * [Simplified Cost Function and Gradient Descent](#simplified_cost_function)
+    * [Advanced Optimization](#advanced_optimization)
+    * [Multiclass Classification](#multi_class_classification)
+ * Regularization
+    * [Problem of Overfitting](#problem_of_overfitting)
+    * [Cost Function](#cost_function)
+    * [Regularized Linear Regression](#regularized_linear_regression)
+    * [Regularized Logistic Regression](#regularized_logistic_regression)
+ * Neural Networks: Representation
+    * [Model Representation](#neural_networks_model_representation)
+    * [Multiclass Classification](#multiclass_classification)
+ * Neural Networks: Learning
+    * [Cost Function](#neural_networks_cost_function)
+    * [Backpropagation Algorithm](#backpropagation_algorithm)
+    * [Backpropagation Intuition](#backpropagation_intuition)
+    * [Implementation Note: Unrolling parameters](#neural_networks_unrolling_params)
+    * [Gradient checking](#neural_networks_gradient_checking)
+    * [Random Initialization](#neural_networks_theta_initialization)
+ * Advice for Applying Machine Learning
+    * [Evaluating a Hypothesis](#evaluate_learning_algorithms)
+    * [Model Selection and Train/Validation/Test sets](#evaluate_learning_algorithms_model_selection)
+    * [Diagnosing Bias vs Variance](#bias_vs_variance)
+    * [Regularization and Bias/Variance](#regularization_bias_vs_variance)
+    * [Learning Curves](#learning_curves)
+ * Machine Learning System Design
+    * [Error Analysis](#error_analysis)
+    * [Error Metrics for Skewed Classes](#error_metrics_for_skewed_classes)
+    * [Trading off precision and recall](#trading_precision_recall)
+    * [Data For Machine Learning](#data_for_ml)
+ * Support Vector Machines
+    * [Optimization Objective](#svm_optimization_objective)
+    * [Kernels](#kernels)
+    * [Using An SVM](#using_an_svm)
+ * Unsupervised Learning
+    * [Introduction](#unsupervised_learning)
+    * [K-means algorithm](#k_means)
+    * [Optimization objective](#k_means_optimization_objective)
+    * [Random Initialization](#k_means_random_initialization)
+    * [Choosing the number of clusters](#k_means_choosing_number_of_clusters)
+ * Dimensionality Reduction
+    * [Data Compression](#dimensionality_reduction_data_compression)
+    * [Data Visualization](#dimensionality_reduction_data_visualization)
+    * [Principal Component Analysis](#pca)
+    * Applying PCA 
+        * [Reconstruction from compressed Representation](#pca_reconstruction_from_compressed_representation)
+        * [Choosing the number of principal components](#pca_choosing_number_of_principal_components)
+ * Anomaly Detection
+    * [Gaussian distribution](#anomaly_detection_gaussian_distribution)
+    * [Algorithm](#anomaly_detection_algorithm)
+    * [Developing and evaluating an anomaly detection system](#anomaly_detection_developing)
+    * [Anomaly detection vs. Supervised Learning](#anomaly_detection_vs_supervisedlearning)
+    * [Choosing What Features to Use](#anomaly_detection_features_to_use)
+ * Recommender Systems
+    * [Problem Formulation](#recommender_system_problem_formulation) 
+    * [Content Based Recommendations](#recommender_system_content_based_recommendation)
+    * [Collaborative Filtering](#collaborative_filtering)
+    * [Vectorization: Low Rank Matrix Factorization](#low_rank_matrix_factorization)
+    * [Implementation Detail: Mean Normalization](#mean_normalization)
+* Large Scale Machine Learning
+    * [Learning with Large Datasets](#large_datasets)
+    * [Stochastic Gradient Descent](#stochastic_gradient_descent)
+    * [Mini-Batch Gradient Descent](#minibatch_gradient_descent)
+    * [Stochastic Gradient Descent Convergence](#stochastic_gradient_descent_convergence)
+    * [Online Learning](#online_learning)
+    * [Map Reduce and Data Parallelism](#mapreduce_data_parallelism)
 <a name ="define_machine_learning"></a>
 ## What is Machine Learning
 
@@ -96,7 +172,7 @@ Our hypothesis function has the general form:
 We give to `hθ(x)` values for `θ0` and `θ1` to get our estimated output `y^`.
  
 Note that we try out various values of `θ0` and `θ1` to try to find values which provide the best possible "fit" or the most representative "straight line" through the data points mapped on the x-y plane.
-
+<a name ="linear_regression_with_one_variable_cost_function"></a>
 ### Cost Function
 We can measure the accuracy of our hypothesis function by using a cost function. This takes an average of all the results of the hypothesis with inputs from x's compared to the actual output y's.
 more formally we write it as:
@@ -149,8 +225,7 @@ temp0 := 1 + root(2)
 temp1 := 2 + root(2)
 θ0 := 1 + root(2)
 ```
-
-<a name ="gradient_descent_intuition"></a>
+<a name="gradient_descent_intuition"></a>
 ## Gradient Descent Intuition
 ### Derivative:
 Let us say we have minimize J(θ1) over θ1 and θ1 belongsTo R
@@ -168,7 +243,7 @@ If alpha(α) is too small, gradient descent can be slow. If alpha is too large, 
 Gradient descent can converge  a local minimum, even with the learning rate fixed
 As we approach local minimum, gradient descent will automatically take smaller steps. 
 So, no need to decrease alpha over time the derivative will get smaller and smaller and eventually will be 0
-
+<a name="gradient_descent_linear_regression"></a>
 ## Apply gradient descent to minimize squared error cost function
 `∂/∂θj J(θ0, θ1) = ∂/∂θj * 1/2*m ∑i =1 to m [(hθ(x(i)) - y(i))^2]`
 i.e.,
@@ -222,6 +297,7 @@ where.
 `θ = [θ0 θ1 θ2 .. θn]` 
 `X =[x0 x1 x2 ... xn]`
 
+<a name="linear_regression_with_multiple_variables"></a>
 # Linear Regression with Multiple variables
 ## Gradient descent for multiple variables
 
@@ -247,7 +323,7 @@ Repeat {
 Repeat {
 θj := θj - α * 1 / m ∑i = 1 to m [hθ(x(i)) - y(i)] * xj^(i) (simultaneous updates for j = 0, . . . , n)
 }
-
+<a name="gradient_descent_featurescaling"></a>
 ## Gradient descent in practice 1: Feature Scaling
 - make sure features are on a similar scale, then gradient descent can converge more quickly 
 get every feature into approximately a -1 <= x(i) <= 1 range
@@ -260,7 +336,7 @@ eg: x1 = size - 1000/2000
 x2 = #bedrooms - 2 /5
 x1 <- x1- u1/s1 u1: avg value of x1 in training set
 s1 is the range i.e. max value - min value or a standard deviation
-
+<a name="gradient_descent_learningrate"></a>
 ## Gradient descent in practice 2: Learning Rate
 ### making sure gradient descent is working correctly
 
@@ -274,7 +350,7 @@ declare convergence if J(θ) decreases by less than 10^-3 in 1 iteration
 - if the learning rate is too small: slow convergence
 - if learning rate is too large: J(θ) may not decrease on every iteration; may not converge
 - to choose learning rate , try: 0.0001, 0.01, 0.1, 1
-
+<a name="features_polynomial_regression"></a>
 ## Features and polynomial regression
 
 **Features and polynomial regression:**
@@ -282,13 +358,13 @@ to fit complicated and non-linear functions
 defining new features we may get a new model
 we may want to fit in a quadratic model like
 θ0 + θ1 * x + θ2 * x ^2 
-
+<a name="normal_equation"></a>
 ## Computing parameters Analytically
 ### Normal Equation
 method to solve for θ analytically
-θ = (X^T * X)^-1 * X^T * Y
-Octave: pinv(X' * X) * X' * Y
-the value θ minimizes the cost function J(θ)
+`θ = (X^T * X)^-1 * X^T * Y`
+Octave: `pinv(X' * X) * X' * Y`
+the value `θ` minimizes the cost function `J(θ)`
 Let us say you have m training examples and n features
 
 |Gradient Descent            | Normal Equation                                       |
@@ -297,12 +373,11 @@ Let us say you have m training examples and n features
 | need many iterations       | Don't need to iterate                                 |
 | works well when n is large | Need to compute (X^T*X)^-1 and slow when n is large   |
 
-
 # Classification and Representation
 ## Classification: 
 divides the problem in two values i.e. 0(no), 1(yes)
 linear regression cannot be applied for classification problems, since we may end up getting values < 1 and < 0, hence we make use of Logistic regression
- 
+<a name="logistic_regression"></a> 
 ## Logistic Regression Hypothesis Representation
 the function to represent the hypothesis when we have a classification problem, it has the property that the output or predictions are always between 0 and 1.
 
@@ -319,7 +394,7 @@ where `g(z) = 1/1 + e^-z`
 where e = sigmoid/logistic function;sigmoid and logistic are acronyms, and can be used interchangeably
  
 `hθ(x) = 1 / 1 + (e ^ -θ^T*x)`
-
+<a name="hypothesis_representation"></a>
 **Interpretation of Hypothesis Output**
 hθ(x) = estimated probability that y = 1 on input x
 For example:
@@ -342,7 +417,7 @@ since this is a classification problem y can take values either 0 or 1
 `p(y = 0 | x; θ) + p(y = 1 | x; θ) = 1`
 i.e.
 `p(y = 0 | x; θ) = 1 - p(y = 1 | x; θ)` 
-
+<a name="decision_boundary"></a>
 ## Decision Boundary
 
 we know that,
@@ -361,7 +436,6 @@ whenever θ^T*x < 0.5
 
 The decision boundary is the line that separates the area where y = 0 and where y = 1. It is created by our hypothesis function.
 Decision boundary is a property of the hypothesis.
-
 ## Non-Linear decision boundaries
 let us suppose hθ(x) = g(θ0 + θ1x1 + θ2x2 + θ3x1^2 + θ4x2^2), and the θ vector is
 θ = [ -1
@@ -395,7 +469,7 @@ hence, we can say
 `θTx<0⇒y=0`
 
 4. Again, the input to the sigmoid function g(z) (e.g. θTX) doesn't need to be linear, and could be a function that describes a circle (e.g. z=θ0+θ1x21+θ2x22) or any shape to fit our data.
- 
+<a name="logistic_regression_cost_function"></a> 
 # Logistic Regression
 ## Cost Function
 Given:
@@ -458,7 +532,7 @@ If our correct answer 'y' is 1, then the cost function will be 0 if our hypothes
 If our hypothesis approaches 0, then the cost function will approach infinity.
  
 Note that writing the cost function in this way guarantees that J(θ) is convex for logistic regression 
-
+<a name="simplified_cost_function"></a>
 ## Simplified cost function and gradient descent
 We know that our logistic regression cost function looks like:
 
@@ -531,11 +605,11 @@ General form of gradient descent is:
 Repeat {
     θj:= θj − α∂/∂θj J(θ)
 }
-
+<a name="advanced_optimization"></a>
 ## Advanced Optimization
 
 Optimization algorithm:
-Cost function J(θ), want Want minθ J(θ):
+Cost function J(θ), we want to minθ J(θ):
 Given θ we have code that can compute 
 - `J(θ)`
 - `α∂/∂θj J(θ)` (for j = 0, 1, ..., n)
@@ -594,7 +668,7 @@ initialTheta = zeros(2,1);
    [optTheta, functionVal, exitFlag] = fminunc(@costFunction, initialTheta, options);
 ```   
 We give to the function "fminunc()" our cost function, our initial vector of theta values, and the "options" object that we created beforehand.
-
+<a name="multi_class_classification"></a>
 ## Multi-class classification: one-vs-all
 Now we will approach the classification of data when we have more than two categories. Instead of y = {0, 1} we will expand our definition so that y = {0, 1...n}.
 
@@ -614,8 +688,9 @@ We do this repeatedly, applying binary logistic regression to each case, and the
 
 Train a logistic regression classifier hθ(x) for each class￼to predict the probability that `y = i`.
 To make a prediction on a new `x`, pick the class that **maximizes** `hθ(x)`
-
+<a name="regularization"></a>
 # Regularization
+<a name="problem_of_overfitting"></a>
 ## Problem of overfitting
 If we have too many features, the learned hypothesis may fit the training set very well (J(theta) = 1/2m ∑i=1m (hθ(x(i)) - y(i))^2 ~ 0), but fail to
 generalize to new examples
@@ -631,7 +706,7 @@ It is usually caused by a complicated function that creates a lot of unnecessary
 2. Regularization
     - keep all the features, but reduce magnitude/values of θj
     - works well when we have a lot of features, each of which contributes a bit to predicting y
-
+<a name="cost_function"></a>
 ## Cost Function
 Small values for parameters θ0, θ1, ..., θn
 - simpler hypothesis
@@ -654,7 +729,7 @@ We could also regularize all of our theta parameters in a single summation as:
 The `λ`, or lambda, is the regularization parameter. It determines how much the costs of our theta parameters are inflated.
 Using the above cost function with the extra summation, we can smooth the output of our hypothesis function to reduce overfitting. 
 If lambda is chosen to be too large, it may smooth out the function too much and cause underfitting. Hence, what would happen if λ=0 or is too small ?
-
+<a name="regularized_linear_regression"></a>
 ## Regularized Linear Regression
 We can apply regularization to both linear regression and logistic regression. We will approach linear regression first.
 
@@ -691,7 +766,7 @@ L is a matrix with 0 at the top left and 1's down the diagonal, with 0's everywh
 It should have dimension `(n+1)×(n+1)`. 
 Intuitively, this is the identity matrix (though we are not including x0), multiplied with a single real number `λ`.
 Recall that if `m ≤ n`, then `XTX` is non-invertible. However, when we add the term `λ⋅L`, then `XTX + λ⋅L` becomes invertible.
-
+<a name="regularized_logistic_regression"></a>
 ## Regularized Logistic Regression 
 When using regularized logistic regression the best way to monitor whether gradient descent is working correctly is to 
 Plot `- [ 1/m  ∑i=1 to m y(i) log hθ(x(i)) + (1 - y(i)) log(1 - hθ(x(i)))] + λ/2m  ∑j=1 to n θj^2` as a function of number of iterations and make sure it's decreasing
@@ -721,6 +796,7 @@ hθ(x) = 1 / 1 + e^-θTx
 ```
 
 # Neural Networks: Representation
+<a name="neural_networks_model_representation"></a>
 ### Model Representation
 Let's examine how we will represent a hypothesis function using neural networks. 
 At a very simple level, neurons are basically computational units that take inputs (dendrites) as electrical inputs (called "spikes") that are channeled to outputs (axons). 
@@ -865,6 +941,7 @@ x1 x2 a1(2) a2(2) hΘ(x)
 1  0   0     0     0
 1  1   1     0     1
 ```
+<a name="multiclass_classification"></a>
 # Multiclass Classification
 To classify data into multiple classes, we let our hypothesis function return a vector of values. 
 Say we wanted to classify our data into one of four categories(pedestrian, car, truck, and motorcycle). 
@@ -883,7 +960,7 @@ The inner layers, each provide us with some new information which leads to our f
  x2   ->  a2(2)  ->   a2(3) -> ... ->  hΘ(x)3
  ...      ...]        ...]             hΘ(x)4]
  xn]
-          
+<a name="neural_networks_cost_function"></a>          
 # Cost Function
 Let's first define a few variables that we will need to use:
 
@@ -913,7 +990,7 @@ Note:
 the double sum simply adds up the logistic regression costs calculated for each cell in the output layer
 the triple sum simply adds up the squares of all the individual Θs in the entire network.
 the i in the triple sum does not refer to training example i
-
+<a name="backpropagation_algorithm"></a>
 ## Backpropagation Algorithm
 "Backpropagation" is neural-network terminology for minimizing our cost function, just like what we were doing with gradient descent in logistic and linear regression. Our goal is to compute:
 
@@ -948,8 +1025,8 @@ Hence we update our new Δ matrix.
     - `D(l)i,j:=1mΔ(l)i,j` If `j=0`
 
 The capital-delta matrix D is used as an "accumulator" to add up our values as we go along and eventually compute our partial derivative. 
-Thus we get ∂∂Θ(l)ijJ(Θ)= D(l)ij
-
+Thus we get ∂/∂Θ(l)ijJ(Θ)= D(l)ij
+<a name="backpropagation_intuition"></a>
 ## Intuition:
 
 `J(Θ)=−1/m ∑t=1 to m ∑k=1 to K [y(t)k log(hΘ(x(t)))k+(1−y(t)k) log(1−hΘ(x(t))k)]+λ/2m ∑l=1 to L−1 ∑i=1 to sl ∑j=1 to sl+1(Θ(l)j,i)2`
@@ -959,7 +1036,7 @@ Intuitively, δ(l)j is the "error" for a(l)j (unit j in layer l). More formally,
 `δ(l)j=∂/∂zj(l)cost(t)`
 
 Recall that our derivative is the slope of a line tangent to the cost function, so the steeper the slope the more incorrect we are.
-
+<a name="neural_networks_unrolling_params"></a>
 ## Implementation Note: Unrolling parameters
 With neural networks, we are working with sets of matrices:
 
@@ -983,7 +1060,7 @@ To summarize:
     From thetaVec, get Θ(1),Θ(2),Θ(3)
     Use forward prop/back prop to compute D(1),D(2),D(3) and J(Θ)
     Unroll D(1),D(2),D(3) to get gradientVec
-    
+<a name="neural_networks_gradient_checking"></a>    
 ## Gradient checking
 Gradient checking will assure that our backpropagation works as intended. We can approximate the derivative of our cost function with:
 
@@ -1010,7 +1087,7 @@ We previously saw how to calculate the deltaVector. So once we compute our gradA
 
 Once you have verified that your backpropagation algorithm is correct, you don't need to compute gradApprox again. 
 The code to compute gradApprox can be very slow.
-
+<a name="neural_networks_theta_initialization"></a>
 ## Random Initialization
 Initializing all theta weights to zero does not work with neural networks. 
 When we backpropagate, all nodes will update to the same value repeatedly. Instead we can randomly initialize our weights for our Θ matrices using the following method:
@@ -1038,7 +1115,6 @@ Number of input units = dimension of features x(i)
 Number of output units = number of classes
 Number of hidden units per layer = usually more the better (must balance with cost of computation as it increases with more hidden units)
 Defaults: 1 hidden layer. If you have more than 1 hidden layer, then it is recommended that you have the same number of units in every hidden layer.
-
 ### How to train a Neural Network?
 1. Randomly initialize the weights
 2. Implement forward propagation to get hΘ(x(i)) for any x(i)
@@ -1056,7 +1132,7 @@ for i = 1:m,
 
 *NOTE:* Ideally, we want hΘ(x(i)) ≈ y(i). This will minimize our cost function. 
 However, keep in mind that J(Θ) is not convex and thus we can end up in a local minimum instead.
-
+<a name="evaluate_learning_algorithms"></a>
 # Evaluating a learning algorithm
 ### Evaluating a Hypothesis
 We perform some troubleshooting by:
@@ -1074,7 +1150,7 @@ Typically, the training set consists of 70 % of your data and the test set is th
 The new procedure using these two sets is then:
 1. Learn Θ and minimize Jtrain(Θ) using the training set
 2. Compute the test set error Jtest(Θ)
-
+<a name="evaluate_learning_algorithms_test_set_error"></a>
 ### The test set error
 1. for Linear regression, `Jtest(Θ)=1/2mtest ∑i=1 to mtest(hΘtest(x(i)) − ytest(i))^2`
 2. For classification ~ Misclassification error (aka 0/1 misclassification error):
@@ -1087,7 +1163,7 @@ This gives us a binary 0 or 1 error result based on a misclassification. The ave
 `Test Error=1/mtest ∑i=1 to mtest err(hΘtest(x(i)),ytest(i))`
 
 This gives us the proportion of the test data that was misclassified.
-
+<a name="evaluate_learning_algorithms_model_selection"></a>
 ### Model Selection and Train/Validation/Test sets
 Just because a learning algorithm fits a training set well, that does not mean it is a good hypothesis. 
 It could over fit and as a result your predictions on the test set would be poor. 
@@ -1107,7 +1183,7 @@ We can now calculate three separate error values for the three different sets us
 - Find the polynomial degree d with the least error using the cross validation set.
 - Estimate the generalization error using the test set with Jtest(Θ(d)), (d = theta from polynomial with lower error);
 This way, the degree of the polynomial d has not been trained using the test set.
-
+<a name="bias_vs_variance"></a>
 ### Diagnosing Bias vs Variance
 The degree of the polynomial d might be contributing to underfitting or overfitting the learning algorithm
 
@@ -1119,7 +1195,7 @@ The cross validation error will tend to **decrease** as we increase d up to a po
 - **High bias (underfitting)**: both `Jtrain(Θ)` and `JCV(Θ)` will be high. Also, `JCV(Θ)≈Jtrain(Θ)`.
 
 - **High variance (overfitting)**: `Jtrain(Θ)` will be low and `JCV(Θ)` will be much greater than `Jtrain(Θ)`.
-
+<a name="regularization_bias_vs_variance"></a>
 ### Regularization and Bias/Variance
 As λ increases, our fit becomes more rigid. 
 On the other hand, as `λ` approaches 0, we tend to over overfit the data. 
@@ -1131,6 +1207,7 @@ So how do we choose our parameter `λ` to get it 'just right' ? In order to choo
  - Compute the cross validation error using the learned `Θ` (computed with `λ`) on the `JCV(Θ)` **without** regularization or `λ = 0`.
  - Select the best combo that produces the lowest error on the cross validation set.
  - Using the best combo `Θ` and `λ`, apply it on `Jtest(Θ)` to see if it has a good generalization of the problem.
+<a name="learning_curves"></a>
 ### Learning Curves
 Let us say we have Jtrain, and JCV
 `Jtrain(Θ) = 1/2m ∑i=1 to m (hΘ(x(i) - y(i))^2`
@@ -1139,7 +1216,6 @@ Let us say we have Jtrain, and JCV
 Training an algorithm on a very few number of data points (such as 1, 2 or 3) will easily have 0 errors because we can always find a quadratic curve that touches exactly those number of points. 
 As the training set gets larger, the error for a quadratic function increases.
 The error value will plateau out after a certain m, or training set size.
-
 **Experiencing high bias**:
 
 **Low training set size**: causes `Jtrain(Θ)` to be low and `JCV(Θ)` to be high.
@@ -1147,7 +1223,6 @@ The error value will plateau out after a certain m, or training set size.
 **Large training set size**: causes both `Jtrain(Θ)` and `JCV(Θ)` to be high with `Jtrain(Θ)≈JCV(Θ)`.
 
 If a learning algorithm is suffering from **high bias**, getting more training data will not (by itself) help much
-
 **Experiencing high variance**:
 
 **Low training set size**: `Jtrain(Θ)` will be low and `JCV(Θ)` will be high.
@@ -1156,7 +1231,6 @@ If a learning algorithm is suffering from **high bias**, getting more training d
 Also, `Jtrain(Θ) < JCV(Θ)` but the difference between them remains significant.
 
 If a learning algorithm is suffering from **high variance**, getting more training data is likely to help.
-
 ### Revisit
 - Getting more training examples -> fixes high variance
 - Trying smaller sets of features -> fixes high variance
@@ -1187,7 +1261,7 @@ These have low bias on the training data, but very high variance.
 - Develop sophisticated features (for example: using email header data in spam emails)
 - Develop algorithms to process your input in different ways (recognizing misspellings in spam).
 It is difficult to tell which of the options will be most helpful.
-
+<a name="error_analysis"></a>
 ### Error Analysis
 - A recommended approach to perform error analysis using cross validation data rather than test data is to develop new features by examining test set, we end up 
 choosing features that will work well specifically for the test set, so `Jtest(Θ)` is no longer a good estimate of how well we generalize example
@@ -1199,7 +1273,7 @@ For example if we use `stemming`, which is the process of treating the same word
 and get a 3% error rate instead of 5%, then we should definitely add it to our model. 
 However, if we try to distinguish between upper case and lower case letters and end up getting a 3.2% error rate instead of 3%, then we should avoid using this new feature. 
 Hence, we should try new things, get a numerical value for our error rate, and based on our result decide whether we want to keep the new feature or not.
-
+<a name="error_metrics_for_skewed_classes">
 ## Handling skewed Data
 
 |Precision/Recall  | Actual Class 1 | Actual class 0 |
@@ -1212,7 +1286,7 @@ Hence, we should try new things, get a numerical value for our error rate, and b
 
 **Recall**: of all patients that actually have cancer, hat fraction did we correctly detect as having cancer?
 `True positives / #Actual positives` = `True positives / True positive + False negative`
-
+<a name="trading_precision_recall"></a>
 ### Trading off precision and recall:
 we know that, 
 precision = true positives/predicted positives
@@ -1231,11 +1305,10 @@ more generally, predict 1 if `hΘ(x) >= threshold`
 
 so, if we increase the threshold from 0.5 to 0.7, then
 more y=0 predictions, this will increase the decrease of true positives and increase the number of false negatives, so recall will decrease
-
 ### F1 score
 how to compare precision/recall numbers?
 F score = 2 * (precision * recall / precision + recall)
-
+<a name="data_for_ml"></a>
 ### Large data rationale
 Assume feature x belongs to Rn+1 has sufficient information to predict y accurately
 
@@ -1246,6 +1319,7 @@ Assume feature x belongs to Rn+1 has sufficient information to predict y accurat
    we have a low variance -> Jtrain(Θ) ~~ Jtest(Θ) -> Jtest will be small
 
 ## Large Margin Classification
+<a name="svm_optimization_objective"></a>
 ### Support Vector Machines: Optimization Objective
 Alternative view of Logistic Regression
 
@@ -1271,7 +1345,7 @@ replacing the costs from above equations 1 and 2, we get equation for SVM:
 `minΘ 1/m [ ∑i=1 to m y(i)cost1(ΘTx(i)) + (1-y(i))cost0(ΘTx(i)) ] + λ/2m ∑j=1 to m Θj^2`
 for SVM we write the above equation slightly differently, 
 starting with, getting rid of the term `1/m`
-
+<a name="kernels"></a>
 ## Kernels
 Given x, compute new features depending on proximity landmarks l(1), l(2), l(3)
 Given an example x, we define the first feature as f1 = similarity(x, l(1)) //some measure of similarity, which is given as
@@ -1318,7 +1392,6 @@ f = [f0(i)
      fm(i)
     ]
 where f0(i) = 1
-
 ## SVM with kernels
 hypothesis: Given x, compute features f ∈ Rm+1, predict "y=1" if ΘT f >= 0
 training:
@@ -1330,7 +1403,7 @@ C(= 1/λ) Large C: lower bias, higher variance, more prone to overfitting (small
 
 σ^2 large σ^2: features fi may vary smoothly, higher bias, lower variance
     small σ^2: features fi may vary less smoothly, lower bias, higher variance
-
+<a name="using_an_svm"></a>
 ## Using an SVM
 - use SVM software package to solve for parameters Θ
 - Need to specify
@@ -1339,7 +1412,6 @@ C(= 1/λ) Large C: lower bias, higher variance, more prone to overfitting (small
 In case of multi-class classification, many SVM packages already have built-in multi-class classification functionality
 otherwise, use one-vs-all method. Train K SVMs, one to distinguish y=i from the rest, for i=1,2,..., K, get Θ(1), Θ(2), ..., Θ(k)
 Pick class i with largest (Θ(i))T x
-
 ### Logistic regression vs. SVMs
 n = number of features (x ∈ Rn+1)
 m = number of training examples
@@ -1353,13 +1425,13 @@ if n is small, m is large:
  create/add more features, then use logistic regression or SVM without a kernel
  
 Neural networks likely to work well for most of these settings, but may be slower to train
- 
+<a name="unsupervised_learning"></a> 
 # Clustering
 ## Unsupervised Learning: Introduction
 - In unsupervised learning the training set is of the form {x(1), x(2), x(3), ..., x(m)} without labels y(i)
 - Clustering is an example of unsupervised learning
 - In unsupervised learning, you are given an unlabeled dataset and are asked to find "structure" in the data
-
+<a name="k_means"></a>
 ## K-means algorithm
 - Randomly initialize 2 points named as cluster centroids, we have 2 of them because we want to group data into 2 clusters
 - Step 1:
@@ -1383,7 +1455,7 @@ Input:
     for k = 1 to K
      uk = average (mean) of points assigned to cluster k
   }
-    
+<a name="k_means_optimization_objective"></a>    
 ## Optimization objective
 once again,
 
@@ -1399,7 +1471,7 @@ K-means algorithm is carrying out optimization in the ints steps, for example in
 J(...) w.r.t c(1), ..., c(m) keeping u1,..., uk fixed
 and in the second step minimizes J(...) w.r.t u1,..., uk
 We can use this to debug our algorithm to make sure our k-means is working correctly
-
+<a name="k_means_random_initialization"></a>
 ## Random Initialization
 When running k-means following are the tasks that can eb done:
 1. the number of cluster centroids K should be less than the number of training examples m
@@ -1422,7 +1494,7 @@ for i = 1 to 100 {
 ```
 finally we pick one that gives us the lowest cost, it seems that if you are running k-means with small no.of clusters(like 2-10) can make sure to find a 
 better local optima, make sure you find better clustering data.
-
+<a name="k_means_choosing_number_of_clusters"></a>
 ### Choosing the number of clusters
 How to choose the value of parameter K
 1. The elbow-method
@@ -1431,13 +1503,15 @@ to summarize for the most part the number of clusters (K) is still chosen by han
 and then to think what is the no.of clusters K, that serves the purpose
 
 ## Dimensionality Reduction
+<a name="dimensionality_reduction_data_compression"></a>
 ### Motivation 1: Data Compression
 Reduce data from 2D to 1D
 Suppose we apply dimensionality reduction to a dataset of m examples {x(1), x(2), ..., x(m)}, where x(i) ∈ Rn, as a result of this we get out
 A lower dimensional dataset {z(1), z(2),..., z(m)} of m examples where z(i) ∈ Rk for some value of k and k <= n
+<a name="dimensionality_reduction_data_visualization"></a>
 ### Motivation 1: Data Visualization
 It is better to visualize data in 2d or 3d, and make more sense of it once dimensionality reduction has been done
-
+<a name="pca"></a>
 ## Principal Component Analysis
 Reduce form 2D to 1D: find a direction (a vector u(1) ∈ Rn) onto which to project the data so as to minimize the projection error
 Reduce from n-dimension to k-dimension: Find k vectors u(1), u(2),..., u(k) onto  which to project the data, so as to minimize the projection error
@@ -1468,12 +1542,13 @@ After mean normalization(ensure every feature has 0 mean) and optionally feature
    `Ureduce = U(:, 1:k)`
    `z = Ureduce' * x`
 
-## Applying PCA   
+## Applying PCA 
+<a name="pca_reconstruction_from_compressed_representation"></a>  
 ### Reconstruction from compressed Representation
 suppose we want to go from a compresses representation back to our original representation of data, i.e.
 we have z = UreduceT x, we want xapprox ∈ Rn which is given by,
 `Xapprox = Ureduce . z`, where Ureduce is a n * k matrix, and z is a k * 1 matrix, so Xapprox will be a n * 1 matrix
-
+<a name="pca_choosing_number_of_principal_components"></a>
 ### Choosing the number of principal components
 average squared projection error: `1/m ∑ i = 1 to m || x(i) - xapprox(i) ||^2`
 total variation in the data: `1/m ∑ i = 1 to m || x(i) ||^2`
@@ -1527,7 +1602,7 @@ So, recommended/good applications of PCA:
  - to compress data so it takes up less computer memory/disk space
  - to reduce the dimension of the input data so as to speed up a learning algorithm
  - to visualize high-dimensional data(by choosing k = 2 or k = 3)
-       
+      
 # Density Estimation
 ## Anomaly Detection
 Given a dataset {x(1), x(2),..., x(m)} assuming that these examples are non-anamolous
@@ -1539,7 +1614,7 @@ examples:
  - manufacturing
  - monitoring computers in a datacenter
 Note: If our anomaly detector is flagging too many anomalous examples, then we need to decrease our threshold ϵ
-      
+<a name="anomaly_detection_gaussian_distribution"></a>      
 ### Gaussian distribution
 The Gaussian Distribution is a familiar bell-shaped curve that can be described by a function `N(μ,σ^2)`
 Let `x ∈ ℝ`. If the probability distribution of x is Gaussian with mean `μ`, variance `σ^2`, then:
@@ -1562,7 +1637,7 @@ We can estimate the parameter `μ` from a given dataset by simply taking the ave
 We can estimate the other parameter, σ2, with our familiar squared error formula:
 
 `σ^2 = 1/m ∑i = 1 to m (x(i)−μ)^2`
-
+<a name="anomaly_detection_algorithm"></a>
 ### Algorithm
 Given a training set of examples, {x(1),…,x(m)} where each example is a vector, x∈ℝn.
 
@@ -1583,7 +1658,7 @@ More compactly, the above expression can be written as follows:
    `p(x)=∏ j = 1 to n p(xj;μj,σj^2)=∏j = 1 to n 1/√2πσj exp(−(xj−μj)^2/2σj^2)` Anomaly if p(x)<ϵ
 
 A vectorized version of the calculation for μ is `μ = 1/m ∑i=1 to m x(i)`. You can vectorize σ2 similarly.
-
+<a name="anomaly_detection_developing"></a>
 ### Developing and evaluating an anomaly detection system
 To evaluate our learning algorithm, we take some labeled data, categorized into anomalous and non-anomalous examples ( y = 0 if normal, y = 1 if anomalous).
 Among that data, take a large proportion of good, non-anomalous data for the training set on which to train p(x).
@@ -1612,7 +1687,7 @@ Note that we use the *cross-validation set to choose parameter ϵ*
 
 Q: Is classification accuracy a good way to measure the algorithm's performance?
 A: *No, because of skewed classes(since an algorithm that always predicts y=0 will have high accuracy)*
-
+<a name="anomaly_detection_vs_supervisedlearning"></a> 
 ### Anomaly detection vs. Supervised Learning
 When do we use anomaly detection and when do we use supervised learning?
 
@@ -1625,7 +1700,7 @@ Use supervised learning:
 
 We have a large number of both positive and negative examples. In other words, the training set is more evenly divided into classes.
 We have enough positive examples for the algorithm to get a sense of what new positives examples look like. The future positive examples are likely similar to the ones in the training set.
-
+<a name="anomaly_detection_features_to_use"></a>
 ### Choosing What Features to Use
 Suppose your anomaly detection algorithm is performing poorly and outputs a large value of p(x) for many normal examples and for many anomalous examples in your
 C.V dataset, then you would try coming up with more features to distinguish between the normal and the anomalous examples.
@@ -1652,6 +1727,7 @@ In this case, you need to examine the anomalous examples that are giving high pr
 In general, choose features that might take on unusually large or small values in the event of an anomaly.
 
 ## Recommender Systems
+<a name="recommender_system_problem_formulation"></a> 
 ### Problem Formulation
 Recommendation is currently a very popular application of machine learning.
 
@@ -1661,7 +1737,7 @@ nu= number of users
 nm= number of movies
 r(i,j)=1 if user j has rated movie i
 y(i,j)= rating given by user j to movie i (defined only if r(i,j)=1)
-
+<a name="recommender_system_content_based_recommendation"></a>
 ### Content Based Recommendations
 We can introduce two features, x1 and x2 which represents how much romance or how much action a movie may have (on a scale of 0−1).
 
@@ -1682,7 +1758,7 @@ minθ(1),…,θ(nu) = `1/2 ∑j = 1 to nu ∑i:r(i,j) = 1 ((θ(j))T(x(i)) − y(
 We can apply our linear regression gradient descent update using the above cost function.
 
 The only real difference is that we eliminate the constant 1m.
-
+<a name="collaborative_filtering"></a> 
 ## Collaborative Filtering
 It can be very difficult to find features such as "amount of romance" or "amount of action" in a movie. To figure this out, we can use feature finders.
 
@@ -1710,13 +1786,13 @@ E.g. for every j=1,...,nu,i=1,...nm:
 `x(i)k:=x(i)k−α( ∑j:r(i,j) = 1 ((θ(j))Tx(i) − y(i,j))θ(j)k + λx(i)k)`
 `θ(j)k:=θ(j)k−α( ∑i:r(i,j) = 1 ((θ(j))Tx(i) − y(i,j))x(i)k + λθ(j)k)`
 For a user with parameters θ and a movie with (learned) features x, predict a star rating of θTx.   
-
+<a name="low_rank_matrix_factorization"></a>
 ### Vectorization: Low Rank Matrix Factorization
 Given matrices X (each row containing features of a particular movie) and Θ (each row containing the weights for those features for a given user), then the full matrix Y of all predicted ratings of all movies by all users is given simply by: `Y=XΘT`.
 
 Predicting how similar two movies i and j are can be done using the distance between their respective feature vectors x. 
 Specifically, we are looking for a small value of `||x(i)−x(j)||`.
-
+<a name="mean_normalization"></a>
 ### Implementation Detail: Mean Normalization
 If the ranking system for movies is used from the previous lectures, then new users (who have watched no movies), will be assigned new movies incorrectly. Specifically, they will be assigned θ with all components equal to zero due to the minimization of the regularization term. That is, we assume that the new user will rank all movies 0, which does not seem intuitively correct.
 
@@ -1748,13 +1824,13 @@ Now we must slightly modify the linear regression prediction to include the mean
 
 `(θ(j))Tx(i) + μi`
 Now, for a new user, the initial predicted values will be equal to the μ term instead of simply being initialized to zero, which is more accurate.
-
+<a name="large_datasets">
 ## Learning with Large Datasets
 We mainly benefit from a very large dataset when our algorithm has high variance when m is small. 
 Recall that if our algorithm has high bias, more data will not have any benefit.
 
 Datasets can often approach such sizes as m = 100,000,000. In this case, our gradient descent step will have to make a summation over all one hundred million examples. We will want to try to avoid this -- the approaches for doing so are described below.
-
+<a name="stochastic_gradient_descent"></a> 
 ### Stochastic Gradient Descent
 Stochastic gradient descent is an alternative to classic (or batch) gradient descent and is more efficient and scalable to large data sets.
 
@@ -1774,7 +1850,7 @@ When the training size `m` is very large stochastic gradient descent can be much
 Stochastic gradient descent will be unlikely to converge at the global minimum and will instead wander around it randomly, but usually yields a result that is close enough. 
 Stochastic gradient descent will usually take 1-10 passes through your data set to get near the global minimum.
 The cost function should go down with every iteration of batch gradient descent but not necessarily with stochastic gradient descent
-
+<a name="minibatch_gradient_descent"></a> 
 ### Mini-Batch Gradient Descent
 Mini-batch gradient descent can sometimes be even faster than stochastic gradient descent. 
 Instead of using all m examples as in batch gradient descent, and instead of using only 1 example as in stochastic gradient descent, we will use some in-between number of examples b.
@@ -1786,7 +1862,7 @@ For i=1,11,21,31,…,991
 `θj:=θj − α 1/10 ∑k=i to i+9 (hθ(x(k)) − y(k))x(k)j`
 We're simply summing over ten examples at a time. 
 The advantage of computing more than one example at a time is that we can use vectorized implementations over the b examples.
-
+<a name="stochastic_gradient_descent_convergence"></a>
 ### Stochastic Gradient Descent Convergence
 How do we choose the learning rate α for stochastic gradient descent? Also, how do we debug stochastic gradient descent to make sure it is getting as close as possible to the global optimum?
 
@@ -1804,12 +1880,13 @@ One strategy for trying to actually converge at the global minimum is to **slowl
  `α=const1/iterationNumber + const2`
 
 However, this is not often done because people don't want to have to fiddle with even more parameters.
-
+<a name="online_learning"></a>
 ### Online Learning
 With a continuous stream of users to a website, we can run an endless loop that gets (x,y), where we collect some user actions for the features in x to predict some behavior y.
 
 You can update θ for each individual (x,y) pair as you collect them. 
 This way, you can adapt to new pools of users, since you are continuously updating theta.
+<a name="mapreduce_data_parallelism"></a>
 ### Map Reduce and Data Parallelism
 We can divide up batch gradient descent and dispatch the cost function for a subset of the data to many different machines so that we can train our algorithm in parallel.
 You can split your training set into z subsets corresponding to the number of machines you have. On each of those machines calculate
