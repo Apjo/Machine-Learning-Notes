@@ -11,3 +11,6 @@ for Python 2.7
 for Python > 2.7
 TBD
 ```
+
+## References:
+http://www.johnwittenauer.net/machine-learning-exercises-in-python-part-1/
