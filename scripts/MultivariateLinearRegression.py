@@ -33,20 +33,23 @@ def gradient_descent(X, y, theta, alpha, iterations):
 
 if __name__ == "__main__":
 
-    print "Loading data file containing population in a city, and profit of a truck "
-    data = pd.read_csv('../data/ex1data1.txt', header=None, names=['Population', 'Profit'])
+    print "Loading data file containing information about size, no.of bedrooms and price for a house"
+    data = pd.read_csv('../data/ex1data2.txt', header=None, names=['Size', 'Bedrooms', 'Price'])
+    print "Successfuly loaded data"
+    print "normalizing data..."
+    # For this task we add another pre-processing step - normalizing the features.
+    data = (data - data.mean()) / data.std()
 
     # append a ones column to the front of the data set
     data.insert(0, 'Ones', 1)
     cols = data.shape[1]
     X = data.iloc[:, 0:cols-1]
-
     y = data.iloc[:, cols-1:cols]
 
     #The cost function is expecting numpy matrices so we need to convert X and y before we can use them. We also need to initialize theta.
     X = np.matrix(X.values)
     y = np.matrix(y.values)
-    theta1 = np.matrix(np.array([0,0]))
+    theta1 = np.matrix(np.array([0,0, 0]))
 
     # gradient descent settings
     alpha = 0.01
@@ -55,6 +58,7 @@ if __name__ == "__main__":
     # compute Cost for our initial solution
     computeCost(X, y, theta1)
     # run the gradient descent algorithm to fit our parameters theta to the training set
+    print "Running gradient descent..."
     g, cost = gradient_descent(X, y, theta1, alpha, iterations)
     # Finally we can compute the cost (error) of the trained model using our fitted parameters.
     computeCost(X, y, g)
